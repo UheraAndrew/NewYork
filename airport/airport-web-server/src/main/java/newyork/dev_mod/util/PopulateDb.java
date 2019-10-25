@@ -14,7 +14,7 @@ import org.apache.log4j.xml.DOMConfigurator;
 
 import newyork.config.ApplicationDomain;
 import newyork.personnel.Person;
-
+import newyork.tablescodes.assets.AssetClass;
 import ua.com.fielden.platform.devdb_support.DomainDrivenDataPopulation;
 import ua.com.fielden.platform.entity.AbstractEntity;
 import ua.com.fielden.platform.persistence.HibernateUtil;
@@ -80,6 +80,8 @@ public class PopulateDb extends DomainDrivenDataPopulation {
         setupUser(User.system_users.SU, "newyork");
         setupPerson(User.system_users.SU, "newyork");
 
+        save(new_(AssetClass.class, "AC1").setDesc("some description"));
+        
         LOGGER.info("Completed database creation and population.");
 	}
 
