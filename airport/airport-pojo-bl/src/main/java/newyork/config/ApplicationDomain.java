@@ -10,6 +10,7 @@ import newyork.personnel.Person;
 import ua.com.fielden.platform.basic.config.IApplicationDomainProvider;
 import ua.com.fielden.platform.domain.PlatformDomainTypes;
 import ua.com.fielden.platform.entity.AbstractEntity;
+import newyork.tablescodes.assets.AssetClass;
 
 /**
  * A class to register domain entities.
@@ -27,13 +28,14 @@ public class ApplicationDomain implements IApplicationDomainProvider {
     }
 
     /**
-     * This is a static initialisation block where all entity types should be registered.
-     */
+         * This is a static initialisation block where all entity types should be registered.
+         */
     static {
         entityTypes.addAll(PlatformDomainTypes.types);
         add(Person.class);
+        add(AssetClass.class);
     }
-    
+
     @Override
     public List<Class<? extends AbstractEntity<?>>> entityTypes() {
         return Collections.unmodifiableList(entityTypes.stream().collect(Collectors.toList()));
