@@ -80,7 +80,7 @@ public class PopulateDb extends DomainDrivenDataPopulation {
         setupUser(User.system_users.SU, "newyork");
         setupPerson(User.system_users.SU, "newyork");
 
-        save(new_(AssetClass.class, "AC1").setDesc("some description"));
+        save(new_composite(AssetClass.class, "AC1").setDesc("some description"));
         
         LOGGER.info("Completed database creation and population.");
 	}
