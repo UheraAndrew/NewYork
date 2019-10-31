@@ -81,11 +81,76 @@ public class AssetClassTest extends AbstractDaoTestCase {
         
         newAc3.setDesc("some value");
         co(AssetClass.class).save(newAc3); // error
-//        
-//        final AssetClass ac3 = co(AssetClass.class).findByKey("AC3");
-//        assertNotNull(ac3);
-//        assertEquals("AC3", ac3.getName());
+        
+        final AssetClass ac3 = co(AssetClass.class).findByKey("AC3");
+        assertNotNull(ac3);
+        assertEquals("AC3", ac3.getName());
     }
+
+    @Test
+    public void persistent_predicates_on_abstract_entities() {
+        final AssetClass ac1 = co(AssetClass.class).findByKey("AC1");
+        assertNotNull(ac1);
+        assertEquals("AC1", ac1.getKey().toString());
+        
+        assertTrue(ac1.isPersistent());
+        assertTrue(ac1.isPersisted());  
+        
+        final IAssetClass coAssetClass = co(AssetClass.class);
+        final AssetClass newAc3 = (AssetClass) coAssetClass.new_().setName("AC3").setDesc("The third asset class");
+        newAc3.setDesc("some value");
+                                
+        assertTrue(newAc3.isPersistent());
+        assertFalse(newAc3.isPersisted());  
+        
+        final AssetClass ac3 = co(AssetClass.class).save(newAc3); 
+        assertTrue(ac3.isPersisted());
+    }
+
+    @Test
+    public void dirty_and_valid_predicates_on_abstract_entities() {
+        final AssetClass ac1 = co$(AssetClass.class).findByKey("AC1");
+        assertNotNull(ac1);
+        assertEquals("AC1", ac1.getKey().toString());
+        
+        assertFalse(ac1.isDirty());
+        assertTrue(ac1.isValid().isSuccessful());  
+        
+        ac1.setName("AC1");
+        assertFalse(ac1.isDirty());
+    
+        ac1.setName("AC42");
+        assertTrue(ac1.isDirty());
+    
+        ac1.setName("AC1");
+        assertFalse(ac1.isDirty());
+
+        final AssetClass ac42 = co$(AssetClass.class).save(ac1.setName("AC42"));
+        assertFalse(ac42.isDirty());
+        ac42.setName("AC1");
+        assertTrue(ac42.isDirty());        
+    }
+    
+    @Test
+    public void meta_property_for_uninstrumented_instances_do_not_exist() {
+        final AssetClass ac1 = co(AssetClass.class).findByKey("AC1");
+        assertFalse(ac1.getPropertyOptionally("name").isPresent());
+
+        final String ac1title = ac1.getPropertyOptionally("name").map(mp -> mp.getTitle()).orElse("no title");
+        assertEquals("no title", ac1title);
+
+        
+        final AssetClass ac1inst = co$(AssetClass.class).findByKey("AC1");
+        assertTrue(ac1inst.getPropertyOptionally("name").isPresent());
+        
+        final String ac1insttitle = ac1inst.getPropertyOptionally("name").map(mp -> mp.getTitle()).orElse("no title");
+        assertNotEquals("no title", ac1insttitle);
+    
+    }
+
+    
+    
+    
     
     @Override
     public boolean saveDataPopulationScriptToFile() {
