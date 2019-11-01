@@ -3,12 +3,12 @@ package newyork.webapp;
 import org.apache.commons.lang.StringUtils;
 
 import newyork.config.personnel.PersonWebUiConfig;
-
+import newyork.tablescodes.assets.AssetClass;
+import newyork.webapp.config.tablescodes.assets.AssetClassWebUiConfig;
 import ua.com.fielden.platform.basic.config.Workflows;
-import ua.com.fielden.platform.web.resources.webui.AbstractWebUiConfig;
 import ua.com.fielden.platform.web.app.config.IWebUiBuilder;
 import ua.com.fielden.platform.web.interfaces.ILayout.Device;
-
+import ua.com.fielden.platform.web.resources.webui.AbstractWebUiConfig;
 import ua.com.fielden.platform.web.resources.webui.UserRoleWebUiConfig;
 import ua.com.fielden.platform.web.resources.webui.UserWebUiConfig;
 
@@ -25,7 +25,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
     private final int port;
 
     public WebUiConfig(final String domainName, final int port, final Workflows workflow, final String path) {
-        super("New York Airport Asset Management", workflow, new String[] { "newyork/" });
+        super("New York Airport Asset Management (development)", workflow, new String[] { "newyork/" });
         if (StringUtils.isEmpty(domainName) || StringUtils.isEmpty(path)) {
             throw new IllegalArgumentException("Both the domain name and application binding path should be specified.");
         }
@@ -70,7 +70,10 @@ public class WebUiConfig extends AbstractWebUiConfig {
         final UserWebUiConfig userWebUiConfig = new UserWebUiConfig(injector());
         final UserRoleWebUiConfig userRoleWebUiConfig = new UserRoleWebUiConfig(injector());
 
-
+        // Asset table codes
+        final AssetClassWebUiConfig assetClassWebUiConfig = AssetClassWebUiConfig.register(injector(), builder);
+        
+        
         // Configure application web resources such as masters and centres
         configApp()
         .addMaster(userWebUiConfig.master)
@@ -89,6 +92,10 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 detailIcon("mainMenu:help").
                 bgColor("#FFE680").
                 captionBgColor("#FFD42A").menu()
+                .addMenuItem("Asset Table Codes").description("Various master data for assets.")
+                    .addMenuItem(AssetClass.ENTITY_TITLE).description(String.format("%s Centre", 
+                            AssetClass.ENTITY_TITLE)).centre(assetClassWebUiConfig.centre).done()
+                .done()
                 .addMenuItem("Personnel").description("Personnel related data")
                     .addMenuItem("Personnel").description("Personnel Centre").centre(personWebUiConfig.centre).done()
                 .done()
