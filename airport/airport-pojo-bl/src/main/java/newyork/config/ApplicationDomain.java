@@ -12,6 +12,7 @@ import ua.com.fielden.platform.domain.PlatformDomainTypes;
 import ua.com.fielden.platform.entity.AbstractEntity;
 import newyork.tablescodes.assets.AssetClass;
 import newyork.tablescodes.assets.AssetType;
+import newyork.tablescodes.assets.ConditionRating;
 
 /**
  * A class to register domain entities.
@@ -36,6 +37,7 @@ public class ApplicationDomain implements IApplicationDomainProvider {
         add(Person.class);
         add(AssetClass.class);
         add(AssetType.class);
+        add(ConditionRating.class);
     }
 
     @Override
