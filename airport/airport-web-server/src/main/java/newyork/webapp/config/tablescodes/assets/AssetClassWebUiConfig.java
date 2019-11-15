@@ -81,7 +81,7 @@ public class AssetClassWebUiConfig {
                     .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", AssetClass.ENTITY_TITLE))
                     .withAction(standardEditAction).also()
                 .addProp("desc").minWidth(100).also()
-                .addProp("active").minWidth(80)
+                .addProp("active").width(80)
                 //.addProp("criticality").minWidth(100)
                 //.addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
                 .addPrimaryAction(standardEditAction)

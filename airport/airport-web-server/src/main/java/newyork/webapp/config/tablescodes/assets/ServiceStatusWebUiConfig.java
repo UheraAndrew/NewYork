@@ -1,4 +1,4 @@
-package newyork.webapp.config.tablescodes.assets;
+    package newyork.webapp.config.tablescodes.assets;
 
 import static java.lang.String.format;
 import static newyork.common.StandardScrollingConfigs.standardStandaloneScrollingConfig;
@@ -98,7 +98,7 @@ public class ServiceStatusWebUiConfig {
 
         final IMaster<ServiceStatus> masterConfig = new SimpleMasterBuilder<ServiceStatus>().forEntity(ServiceStatus.class)
                 .addProp("name").asSinglelineText().also()
-                .addProp(2"desc").asMultilineText().also()
+                .addProp("desc").asMultilineText().also()
                 .addAction(MasterActions.REFRESH).shortDesc("Cancel").longDesc("Cancel action")
                 .addAction(MasterActions.SAVE)
                 .setActionBarLayoutFor(Device.DESKTOP, Optional.empty(), LayoutComposer.mkActionLayoutForMaster())

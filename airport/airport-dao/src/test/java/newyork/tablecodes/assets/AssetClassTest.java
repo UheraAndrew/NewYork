@@ -21,11 +21,15 @@ import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.selec
 import static ua.com.fielden.platform.utils.EntityUtils.fetch;
 
 import java.math.BigDecimal;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.Ignore;
 import org.junit.Test;
 
+import ua.com.fielden.platform.dao.IEntityDao;
 import ua.com.fielden.platform.dao.QueryExecutionModel;
+import ua.com.fielden.platform.entity.meta.MetaProperty;
 import ua.com.fielden.platform.entity.query.fluent.fetch;
 import ua.com.fielden.platform.entity.query.model.EntityResultQueryModel;
 import ua.com.fielden.platform.entity.query.model.OrderingModel;
@@ -34,6 +38,7 @@ import ua.com.fielden.platform.utils.IUniversalConstants;
 import newyork.personnel.Person;
 import newyork.tablescodes.assets.AssetClass;
 import newyork.tablescodes.assets.IAssetClass;
+import newyork.tablescodes.validators.NoSpacesValidator;
 import newyork.test_config.AbstractDaoTestCase;
 import newyork.test_config.UniversalConstantsForTesting;
 
@@ -63,6 +68,16 @@ public class AssetClassTest extends AbstractDaoTestCase {
     }
     
     @Test
+    public void asset_class_name_cannot_contain_spaces() {
+        final AssetClass ac1 = co$(AssetClass.class).findByKeyAndFetch(IAssetClass.FETCH_PROVIDER.fetchModel(), "AC1");
+        assertTrue(ac1.isValid().isSuccessful());
+        
+        ac1.setName("name with spaces");
+        assertFalse(ac1.isValid().isSuccessful());
+        assertEquals(NoSpacesValidator.ERR_NO_SPACES_ALLOWED, ac1.isValid().getMessage());
+     }
+    
+    @Test
     public void some_random_operations() {
         final AssetClass ac1 = co(AssetClass.class).findByKey("AC1");
         assertNotNull(ac1);
@@ -80,7 +95,7 @@ public class AssetClassTest extends AbstractDaoTestCase {
         assertEquals("some value", newAc3.getDesc());
         
         newAc3.setDesc("some value");
-        co(AssetClass.class).save(newAc3); // error
+        co(AssetClass.class).save(newAc3);
         
         final AssetClass ac3 = co(AssetClass.class).findByKey("AC3");
         assertNotNull(ac3);
@@ -147,10 +162,34 @@ public class AssetClassTest extends AbstractDaoTestCase {
         assertNotEquals("no title", ac1insttitle);
     
     }
-
     
+    @Test
+    public void can_find_dirty_properties() {
+        final AssetClass ac1 = co$(AssetClass.class).findByKey("AC1");
+        ac1.setName("AC42");
+        
+        final Set<MetaProperty<?>> dirtyProps = ac1.getProperties().values().stream()
+                .filter(mp -> mp.isDirty()).collect(Collectors.toSet());
+        assertEquals(1, dirtyProps.size());
+        dirtyProps.forEach(System.out::println);
+    }
     
-    
+    @Test
+    public void requiredness_of_properties_defined_as_required_cannot_be_changed_at_runtime() {
+        final IEntityDao<AssetClass> co$ = co$(AssetClass.class);
+        
+        final AssetClass ac1 = co$.findByKey("AC1");
+        assertNotNull(ac1.getDesc());
+        
+        final MetaProperty<String> mpDesc = ac1.getProperty("desc");
+        assertTrue(mpDesc.isRequired());
+        
+        try {
+            mpDesc.setRequired(false);
+            fail("Changing defined requiredness at runtime shold have thrown an exception.");
+        } catch (final Exception ex) {
+        }
+    }
     
     @Override
     public boolean saveDataPopulationScriptToFile() {
