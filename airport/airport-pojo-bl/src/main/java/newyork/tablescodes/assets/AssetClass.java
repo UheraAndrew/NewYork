@@ -1,5 +1,6 @@
 package newyork.tablescodes.assets;
 
+import newyork.tablescodes.validators.LongerThan2Validator;
 import newyork.tablescodes.validators.NoSpacesValidator;
 import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
@@ -11,6 +12,7 @@ import ua.com.fielden.platform.entity.annotation.MapEntityTo;
 import ua.com.fielden.platform.entity.annotation.MapTo;
 import ua.com.fielden.platform.entity.annotation.Observable;
 import ua.com.fielden.platform.entity.annotation.Title;
+import ua.com.fielden.platform.entity.annotation.UpperCase;
 import ua.com.fielden.platform.entity.annotation.mutator.BeforeChange;
 import ua.com.fielden.platform.entity.annotation.mutator.Handler;
 import ua.com.fielden.platform.entity.annotation.DescTitle;
@@ -43,7 +45,8 @@ public class AssetClass extends ActivatableAbstractEntity<DynamicEntityKey> {
     @MapTo
     @Title(value = "Name", desc = "Asset Class name")
     @CompositeKeyMember(1)
-    @BeforeChange(@Handler(NoSpacesValidator.class))
+    @BeforeChange({@Handler(NoSpacesValidator.class), @Handler(LongerThan2Validator.class)})
+    @UpperCase
     private String name;
 
     @Observable

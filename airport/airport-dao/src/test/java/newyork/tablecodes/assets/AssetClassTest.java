@@ -38,6 +38,7 @@ import ua.com.fielden.platform.utils.IUniversalConstants;
 import newyork.personnel.Person;
 import newyork.tablescodes.assets.AssetClass;
 import newyork.tablescodes.assets.IAssetClass;
+import newyork.tablescodes.validators.LongerThan2Validator;
 import newyork.tablescodes.validators.NoSpacesValidator;
 import newyork.test_config.AbstractDaoTestCase;
 import newyork.test_config.UniversalConstantsForTesting;
@@ -76,6 +77,16 @@ public class AssetClassTest extends AbstractDaoTestCase {
         assertFalse(ac1.isValid().isSuccessful());
         assertEquals(NoSpacesValidator.ERR_NO_SPACES_ALLOWED, ac1.isValid().getMessage());
      }
+    
+    @Test
+    public void asset_class_name_cannot_be_shorter_than_3_characters() {
+        final AssetClass ac1 = co$(AssetClass.class).findByKeyAndFetch(IAssetClass.FETCH_PROVIDER.fetchModel(), "AC1");
+        assertTrue(ac1.isValid().isSuccessful());
+        
+        ac1.setName("A");
+        assertFalse(ac1.isValid().isSuccessful());
+        assertEquals(LongerThan2Validator.ERR_SHOULD_BE_LONGER_THAN, ac1.isValid().getMessage());
+    }
     
     @Test
     public void some_random_operations() {
