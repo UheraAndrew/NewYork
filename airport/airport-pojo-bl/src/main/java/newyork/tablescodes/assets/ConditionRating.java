@@ -54,7 +54,7 @@ public class ConditionRating extends ActivatableAbstractEntity<DynamicEntityKey>
     
     @IsProperty
     @MapTo
-    @Title(value = "Date", desc = "Asset Type maintance/replacement")
+    @Title(value = "Maintenance and/or replacement date", desc = "Asset Type maintance/replacement")
     private String planDate;
 
     @Observable

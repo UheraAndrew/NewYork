@@ -87,6 +87,7 @@ public class ConditionRatingWebUiConfig {
                     .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", ConditionRating.ENTITY_TITLE))
                     .withAction(standardEditAction).also()
                 .addProp("desc").minWidth(100).also()
+                .addProp("planDate").minWidth(100).also()
                 .addProp("assetType").width(100).withActionSupplier(builder.getOpenMasterAction(AssetType.class)).also()
                 .addProp("active").width(100)
                 //.addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
