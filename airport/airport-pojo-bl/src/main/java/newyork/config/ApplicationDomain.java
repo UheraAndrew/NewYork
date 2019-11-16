@@ -11,6 +11,7 @@ import ua.com.fielden.platform.basic.config.IApplicationDomainProvider;
 import ua.com.fielden.platform.domain.PlatformDomainTypes;
 import ua.com.fielden.platform.entity.AbstractEntity;
 import newyork.tablescodes.assets.AssetClass;
+import newyork.tablescodes.assets.AssetType;
 
 /**
  * A class to register domain entities.
@@ -28,12 +29,13 @@ public class ApplicationDomain implements IApplicationDomainProvider {
     }
 
     /**
-         * This is a static initialisation block where all entity types should be registered.
-         */
+             * This is a static initialisation block where all entity types should be registered.
+             */
     static {
         entityTypes.addAll(PlatformDomainTypes.types);
         add(Person.class);
         add(AssetClass.class);
+        add(AssetType.class);
     }
 
     @Override
