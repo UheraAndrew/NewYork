@@ -58,7 +58,7 @@ public class ConditionRatingWebUiConfig {
      * @return created entity centre
      */
     private EntityCentre<ConditionRating> createCentre(final Injector injector, final IWebUiBuilder builder) {
-        final String layout = LayoutComposer.mkGridForCentre(3, 1);
+        final String layout = LayoutComposer.mkGridForCentre(2, 2);
 
         final EntityActionConfig standardNewAction = StandardActions.NEW_ACTION.mkAction(ConditionRating.class);
         final EntityActionConfig standardDeleteAction = StandardActions.DELETE_ACTION.mkAction(ConditionRating.class);
@@ -77,8 +77,7 @@ public class ConditionRatingWebUiConfig {
                 .addCrit("this").asMulti().autocompleter(ConditionRating.class).also()
                 .addCrit("desc").asMulti().text().also()
                 .addCrit("planDate").asMulti().text().also()
-                .addCrit("assetType").asMulti().autocompleter(AssetType.class).also()
-                .addCrit("active").asMulti().bool()
+                .addCrit("assetType").asMulti().autocompleter(AssetType.class)
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
@@ -88,8 +87,7 @@ public class ConditionRatingWebUiConfig {
                     .withAction(standardEditAction).also()
                 .addProp("desc").minWidth(100).also()
                 .addProp("planDate").minWidth(100).also()
-                .addProp("assetType").width(100).withActionSupplier(builder.getOpenMasterAction(AssetType.class)).also()
-                .addProp("active").width(100)
+                .addProp("assetType").width(100).withActionSupplier(builder.getOpenMasterAction(AssetType.class))
                 //.addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
                 .addPrimaryAction(standardEditAction)
                 .build();
@@ -111,7 +109,6 @@ public class ConditionRatingWebUiConfig {
                 .addProp("desc").asMultilineText().also()
                 .addProp("planDate").asMultilineText().also()
                 .addProp("assetType").asAutocompleter().also()
-                .addProp("active").asCheckbox().also()
                 .addAction(MasterActions.REFRESH).shortDesc("Cancel").longDesc("Cancel action")
                 .addAction(MasterActions.SAVE)
                 .setActionBarLayoutFor(Device.DESKTOP, Optional.empty(), LayoutComposer.mkActionLayoutForMaster())
