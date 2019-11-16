@@ -1,6 +1,7 @@
 package newyork.tablescodes.assets;
 
-import ua.com.fielden.platform.entity.AbstractPersistentEntity;
+import newyork.tablescodes.validators.LongerThanValidator;
+import newyork.tablescodes.validators.NoSpacesValidator;
 import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.KeyType;
@@ -11,6 +12,10 @@ import ua.com.fielden.platform.entity.annotation.MapEntityTo;
 import ua.com.fielden.platform.entity.annotation.MapTo;
 import ua.com.fielden.platform.entity.annotation.Observable;
 import ua.com.fielden.platform.entity.annotation.Title;
+import ua.com.fielden.platform.entity.annotation.UpperCase;
+import ua.com.fielden.platform.entity.annotation.mutator.BeforeChange;
+import ua.com.fielden.platform.entity.annotation.mutator.Handler;
+import ua.com.fielden.platform.entity.annotation.mutator.IntParam;
 import ua.com.fielden.platform.entity.annotation.DescTitle;
 import ua.com.fielden.platform.entity.annotation.DisplayDescription;
 import ua.com.fielden.platform.entity.annotation.IsProperty;
@@ -41,6 +46,9 @@ public class ServiceStatus extends ActivatableAbstractEntity<DynamicEntityKey> {
     @MapTo
     @Title(value = "Name", desc = "Service Status name")
     @CompositeKeyMember(1)
+    @BeforeChange({
+        @Handler(NoSpacesValidator.class), 
+        @Handler(value = LongerThanValidator.class, integer = @IntParam(name = "minLength", value = 3))})
     private String name;
 
     @Observable
