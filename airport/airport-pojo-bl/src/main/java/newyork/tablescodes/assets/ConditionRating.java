@@ -9,6 +9,7 @@ import ua.com.fielden.platform.entity.annotation.CompositeKeyMember;
 import ua.com.fielden.platform.entity.annotation.MapEntityTo;
 import ua.com.fielden.platform.entity.annotation.MapTo;
 import ua.com.fielden.platform.entity.annotation.Observable;
+import ua.com.fielden.platform.entity.annotation.Required;
 import ua.com.fielden.platform.entity.annotation.Title;
 import ua.com.fielden.platform.entity.annotation.DescTitle;
 import ua.com.fielden.platform.entity.annotation.DisplayDescription;
@@ -69,6 +70,7 @@ public class ConditionRating extends ActivatableAbstractEntity<DynamicEntityKey>
     
     @IsProperty
     @MapTo
+    @Required
     @Title(value = "Asset Type", desc = "The class of this condition rating")
     private AssetType assetType;
 
