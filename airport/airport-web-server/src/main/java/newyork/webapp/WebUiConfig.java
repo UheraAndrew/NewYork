@@ -4,11 +4,14 @@ import org.apache.commons.lang.StringUtils;
 
 import newyork.config.personnel.PersonWebUiConfig;
 import newyork.tablescodes.assets.AssetClass;
+import newyork.tablescodes.assets.AssetType;
+import newyork.tablescodes.assets.ConditionRating;
 import newyork.tablescodes.assets.ServiceStatus;
 import newyork.webapp.config.tablescodes.assets.AssetClassWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.ServiceStatusWebUiConfig;
 import newyork.tablescodes.assets.AssetType;
 import newyork.webapp.config.tablescodes.assets.AssetTypeWebUiConfig;
+import newyork.webapp.config.tablescodes.assets.ConditionRatingWebUiConfig;
 import ua.com.fielden.platform.basic.config.Workflows;
 import ua.com.fielden.platform.web.app.config.IWebUiBuilder;
 import ua.com.fielden.platform.web.interfaces.ILayout.Device;
@@ -78,7 +81,8 @@ public class WebUiConfig extends AbstractWebUiConfig {
         // Asset table codes
         final AssetClassWebUiConfig assetClassWebUiConfig = AssetClassWebUiConfig.register(injector(), builder);
         final AssetTypeWebUiConfig assetTypeWebUiConfig = AssetTypeWebUiConfig.register(injector(), builder);
-        final ServiceStatusWebUiConfig serviceStatusWebUiConfig = ServiceStatusWebUiConfig.register(injector(), builder);        
+        final ServiceStatusWebUiConfig serviceStatusWebUiConfig = ServiceStatusWebUiConfig.register(injector(), builder); 
+        final ConditionRatingWebUiConfig conditionRatingWebUiConfig = ConditionRatingWebUiConfig.register(injector(), builder);
         
         // Configure application web resources such as masters and centres
         configApp()
@@ -104,9 +108,10 @@ public class WebUiConfig extends AbstractWebUiConfig {
                     .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", 
                             AssetType.ENTITY_TITLE)).centre(assetTypeWebUiConfig.centre).done()
                     .addMenuItem(ServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", 
-                    		ServiceStatus.ENTITY_TITLE)).centre(serviceStatusWebUiConfig.centre).done()
-                .done()                
-
+                    		    ServiceStatus.ENTITY_TITLE)).centre(serviceStatusWebUiConfig.centre).done()
+                    .addMenuItem(ConditionRating.ENTITY_TITLE).description(String.format("%s Centre", 
+                            ConditionRating.ENTITY_TITLE)).centre(conditionRatingWebUiConfig.centre).done()
+                .done()
                 .addMenuItem("Personnel").description("Personnel related data")
                     .addMenuItem("Personnel").description("Personnel Centre").centre(personWebUiConfig.centre).done()
                 .done()

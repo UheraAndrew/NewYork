@@ -24,26 +24,26 @@ import ua.com.fielden.platform.utils.Pair;
  *
  */
 @KeyType(DynamicEntityKey.class)
-@KeyTitle("Asset Type")
-@CompanionObject(IAssetType.class)
+@KeyTitle("Condition Rating")
+@CompanionObject(IConditionRating.class)
 @MapEntityTo
-@DescTitle("Asset Type description")
+@DescTitle("Condition Rating description")
 @DisplayDescription
 @DescRequired
-public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
+public class ConditionRating extends ActivatableAbstractEntity<DynamicEntityKey> {
 
-    private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(AssetType.class);
+    private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(ConditionRating.class);
     public static final String ENTITY_TITLE = entityTitleAndDesc.getKey();
     public static final String ENTITY_DESC = entityTitleAndDesc.getValue();
 
     @IsProperty
     @MapTo
-    @Title(value = "Name", desc = "Asset Type name")
+    @Title(value = "Name", desc = "Condition Rating name")
     @CompositeKeyMember(1)
     private String name;
 
     @Observable
-    public AssetType setName(final String name) {
+    public ConditionRating setName(final String name) {
         this.name = name;
         return this;
     }
@@ -51,19 +51,35 @@ public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
     public String getName() {
         return name;
     }
- 
+    
     @IsProperty
     @MapTo
-    @Title(value = "Asset Class", desc = "The class of this asset type")
-    private AssetClass assetClass;
+    @Title(value = "Maintenance and/or replacement date", desc = "Asset Type maintance/replacement")
+    private String planDate;
 
     @Observable
-    public AssetType setAssetClass(final AssetClass assetClass) {
-        this.assetClass = assetClass;
+    public ConditionRating setPlanDate(final String planDate) {
+        this.planDate = planDate;
         return this;
     }
 
-    public AssetClass getAssetClass() {
-        return assetClass;
+    public String getPlanDate() {
+        return planDate;
     }
+    
+    @IsProperty
+    @MapTo
+    @Title(value = "Asset Type", desc = "The class of this condition rating")
+    private AssetType assetType;
+
+    @Observable
+    public ConditionRating setAssetType(final AssetType assetType) {
+        this.assetType= assetType;
+        return this;
+    }
+
+    public AssetType getAssetType() {
+        return assetType;
+    }
+
 }

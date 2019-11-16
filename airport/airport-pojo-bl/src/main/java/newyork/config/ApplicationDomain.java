@@ -13,6 +13,7 @@ import ua.com.fielden.platform.entity.AbstractEntity;
 import newyork.tablescodes.assets.AssetClass;
 import newyork.tablescodes.assets.ServiceStatus;
 import newyork.tablescodes.assets.AssetType;
+import newyork.tablescodes.assets.ConditionRating;
 
 /**
  * A class to register domain entities.
@@ -29,16 +30,17 @@ public class ApplicationDomain implements IApplicationDomainProvider {
 		domainTypes.add(domainType);
 	}
 
-  /**
-	         * This is a static initialisation block where all entity types should be registered.
-	         */
-	static {
-		entityTypes.addAll(PlatformDomainTypes.types);
-		add(Person.class);
-		add(AssetClass.class);
-    add(AssetType.class);
-		add(ServiceStatus.class);
-	}
+    /**
+             * This is a static initialisation block where all entity types should be registered.
+             */
+    static {
+        entityTypes.addAll(PlatformDomainTypes.types);
+        add(Person.class);
+        add(AssetClass.class);
+        add(AssetType.class);
+        add(ServiceStatus.class);
+        add(ConditionRating.class);
+    }
 
 	@Override
 	public List<Class<? extends AbstractEntity<?>>> entityTypes() {
