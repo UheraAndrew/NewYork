@@ -54,7 +54,7 @@ public class AssetWebUiConfig {
      * @return created entity centre
      */
     private EntityCentre<Asset> createCentre(final Injector injector, final IWebUiBuilder builder) {
-        final String layout = LayoutComposer.mkGridForCentre(1, 2);
+        final String layout = LayoutComposer.mkGridForCentre(3, 1);
 
         final EntityActionConfig standardNewAction = StandardActions.NEW_ACTION.mkAction(Asset.class);
         final EntityActionConfig standardDeleteAction = StandardActions.DELETE_ACTION.mkAction(Asset.class);
@@ -71,7 +71,8 @@ public class AssetWebUiConfig {
                 .addTopAction(standardSortAction).also()
                 .addTopAction(standardExportAction)
                 .addCrit("this").asMulti().autocompleter(Asset.class).also()
-                .addCrit("desc").asMulti().text()
+                .addCrit("desc").asMulti().text().also()
+                .addCrit("active").asMulti().bool()
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
@@ -79,7 +80,8 @@ public class AssetWebUiConfig {
                 .addProp("this").order(1).asc().minWidth(100)
                     .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", Asset.ENTITY_TITLE))
                     .withAction(standardEditAction).also()
-                .addProp("desc").minWidth(100)
+                .addProp("desc").minWidth(100).also()
+                .addProp("active").width(80)
                 //.addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
                 .addPrimaryAction(standardEditAction)
                 .build();
@@ -94,18 +96,19 @@ public class AssetWebUiConfig {
      * @return created entity master
      */
     private EntityMaster<Asset> createMaster(final Injector injector) {
-        final String layout = LayoutComposer.mkGridForMasterFitWidth(2, 1);
+        final String layout = LayoutComposer.mkGridForMasterFitWidth(3, 1);
 
         final IMaster<Asset> masterConfig = new SimpleMasterBuilder<Asset>().forEntity(Asset.class)
                 .addProp("number").asSinglelineText().also()
                 .addProp("desc").asMultilineText().also()
+                .addProp("active").asCheckbox().also()
                 .addAction(MasterActions.REFRESH).shortDesc("Cancel").longDesc("Cancel action")
                 .addAction(MasterActions.SAVE)
                 .setActionBarLayoutFor(Device.DESKTOP, Optional.empty(), LayoutComposer.mkActionLayoutForMaster())
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
-                .withDimensions(mkDim(LayoutComposer.SIMPLE_ONE_COLUMN_MASTER_DIM_WIDTH, 300, Unit.PX))
+                .withDimensions(mkDim(LayoutComposer.SIMPLE_ONE_COLUMN_MASTER_DIM_WIDTH, 360, Unit.PX))
                 .done();
 
         return new EntityMaster<>(Asset.class, masterConfig, injector);
