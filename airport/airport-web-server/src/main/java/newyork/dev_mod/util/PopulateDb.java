@@ -6,15 +6,15 @@ import java.io.FileInputStream;
 import java.util.List;
 import java.util.Properties;
 
-import org.hibernate.dialect.Dialect;
-import org.hibernate.dialect.H2Dialect;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.dialect.H2Dialect;
 
 import newyork.config.ApplicationDomain;
 import newyork.personnel.Person;
 import newyork.tablescodes.assets.AssetClass;
+import newyork.tablescodes.assets.AssetType;
 import ua.com.fielden.platform.devdb_support.DomainDrivenDataPopulation;
 import ua.com.fielden.platform.entity.AbstractEntity;
 import ua.com.fielden.platform.persistence.HibernateUtil;
@@ -79,8 +79,11 @@ public class PopulateDb extends DomainDrivenDataPopulation {
         
         setupUser(User.system_users.SU, "newyork");
         setupPerson(User.system_users.SU, "newyork");
-
-        save(new_composite(AssetClass.class, "AC1").setDesc("some description"));
+        
+        final AssetClass ac1 = save(new_(AssetClass.class).setName("AC1").setDesc("some description").setActive(true));
+        save(new_(AssetClass.class).setName("AC2").setDesc("some description2").setActive(false));
+        save(new_(AssetType.class).setName("AT1").setDesc("some description2").setAssetClass(ac1));
+        
         
         LOGGER.info("Completed database creation and population.");
 	}
