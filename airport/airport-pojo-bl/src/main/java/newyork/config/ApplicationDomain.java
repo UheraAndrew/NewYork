@@ -15,6 +15,9 @@ import newyork.tablescodes.assets.ServiceStatus;
 import newyork.tablescodes.assets.AssetType;
 import newyork.tablescodes.assets.ConditionRating;
 import newyork.assets.Asset;
+import newyork.tablescodes.assets.ui_actions.OpenAssetClassMasterAction;
+import newyork.tablescodes.assets.master.menu.actions.AssetClassMaster_OpenMain_MenuItem;
+import newyork.tablescodes.assets.master.menu.actions.AssetClassMaster_OpenAssetType_MenuItem;
 
 /**
  * A class to register domain entities.
@@ -32,8 +35,8 @@ public class ApplicationDomain implements IApplicationDomainProvider {
     }
 
     /**
-                 * This is a static initialisation block where all entity types should be registered.
-                 */
+                             * This is a static initialisation block where all entity types should be registered.
+                             */
     static {
         entityTypes.addAll(PlatformDomainTypes.types);
         add(Person.class);
@@ -42,6 +45,9 @@ public class ApplicationDomain implements IApplicationDomainProvider {
         add(ServiceStatus.class);
         add(ConditionRating.class);
         add(Asset.class);
+        add(OpenAssetClassMasterAction.class);
+        add(AssetClassMaster_OpenMain_MenuItem.class);
+        add(AssetClassMaster_OpenAssetType_MenuItem.class);
     }
 
     @Override

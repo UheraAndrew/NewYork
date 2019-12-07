@@ -1,10 +1,13 @@
 package newyork.webapp.config.tablescodes.assets;
 
-import static java.lang.String.format;
-import static newyork.common.StandardActions.actionAddDesc;
-import static newyork.common.StandardActions.actionEditDesc;
+import static ua.com.fielden.platform.web.PrefDim.mkDim;
 import static newyork.common.StandardScrollingConfigs.standardEmbeddedScrollingConfig;
 import static newyork.common.StandardScrollingConfigs.standardStandaloneScrollingConfig;
+import static newyork.common.StandardActions.actionAddDesc;
+import static newyork.common.StandardActions.actionEditDesc;
+import static java.lang.String.format;
+import static ua.com.fielden.platform.dao.AbstractOpenCompoundMasterDao.enhanceEmbededCentreQuery;
+import static ua.com.fielden.platform.entity_centre.review.DynamicQueryBuilder.createConditionProperty;
 
 import java.util.Optional;
 
@@ -12,60 +15,56 @@ import com.google.inject.Injector;
 
 import newyork.tablescodes.assets.AssetClass;
 import newyork.tablescodes.assets.AssetType;
+import newyork.main.menu.tablescodes.assets.MiAssetClassMaster_AssetType;
 import newyork.tablescodes.assets.master.menu.actions.AssetClassMaster_OpenAssetType_MenuItem;
-import newyork.tablescodes.assets.master.menu.actions.AssetClassMaster_OpenMain_MenuItem;
 import newyork.tablescodes.assets.ui_actions.OpenAssetClassMasterAction;
 import newyork.tablescodes.assets.ui_actions.producers.OpenAssetClassMasterActionProducer;
-import newyork.common.LayoutComposer;
-import newyork.common.StandardActions;
-
+import newyork.tablescodes.assets.master.menu.actions.AssetClassMaster_OpenMain_MenuItem;
 import ua.com.fielden.platform.web.interfaces.ILayout.Device;
-import ua.com.fielden.platform.web.action.CentreConfigurationWebUiConfig.CentreConfigActions;
 import ua.com.fielden.platform.web.centre.api.EntityCentreConfig;
-import ua.com.fielden.platform.web.centre.api.actions.EntityActionConfig;
 import ua.com.fielden.platform.web.centre.api.impl.EntityCentreBuilder;
+import ua.com.fielden.platform.web.centre.api.actions.EntityActionConfig;
 import ua.com.fielden.platform.web.view.master.api.actions.MasterActions;
+import ua.com.fielden.platform.web.view.master.api.impl.SimpleMasterBuilder;
 import ua.com.fielden.platform.web.view.master.api.compound.Compound;
 import ua.com.fielden.platform.web.view.master.api.compound.impl.CompoundMasterBuilder;
-import ua.com.fielden.platform.web.view.master.api.impl.SimpleMasterBuilder;
 import ua.com.fielden.platform.web.view.master.api.IMaster;
 import ua.com.fielden.platform.web.app.config.IWebUiBuilder;
-import newyork.main.menu.tablescodes.assets.MiAssetClass;
-import newyork.main.menu.tablescodes.assets.MiAssetClassMaster_AssetType;
-import ua.com.fielden.platform.web.centre.CentreContext;
-import ua.com.fielden.platform.web.centre.EntityCentre;
-import ua.com.fielden.platform.web.centre.IQueryEnhancer;
-import ua.com.fielden.platform.web.view.master.EntityMaster;
-
-import static ua.com.fielden.platform.dao.AbstractOpenCompoundMasterDao.enhanceEmbededCentreQuery;
-import static ua.com.fielden.platform.entity_centre.review.DynamicQueryBuilder.createConditionProperty;
-import static ua.com.fielden.platform.web.PrefDim.mkDim;
-import static ua.com.fielden.platform.web.centre.api.context.impl.EntityCentreContextSelector.context;
-
-import ua.com.fielden.platform.entity.query.fluent.EntityQueryProgressiveInterfaces.ICompleted;
-import ua.com.fielden.platform.entity.query.fluent.EntityQueryProgressiveInterfaces.IWhere0;
 import ua.com.fielden.platform.web.PrefDim;
 import ua.com.fielden.platform.web.PrefDim.Unit;
+import newyork.common.LayoutComposer;
+import newyork.common.StandardActions;
+import ua.com.fielden.platform.web.centre.EntityCentre;
+import ua.com.fielden.platform.web.action.CentreConfigurationWebUiConfig.CentreConfigActions;
+import static ua.com.fielden.platform.web.centre.api.context.impl.EntityCentreContextSelector.context;
+
+import ua.com.fielden.platform.web.centre.CentreContext;
+import ua.com.fielden.platform.web.centre.IQueryEnhancer;
+import ua.com.fielden.platform.entity.query.fluent.EntityQueryProgressiveInterfaces.ICompleted;
+import ua.com.fielden.platform.entity.query.fluent.EntityQueryProgressiveInterfaces.IWhere0;
+import newyork.main.menu.tablescodes.assets.MiAssetClass;
+import ua.com.fielden.platform.web.view.master.EntityMaster;
 /**
  * {@link AssetClass} Web UI configuration.
  *
  * @author Developers
  *
  */
-public class AssetClassWebUiConfig {
+public class AssetClassWebUiConfig2 {
 
     private final Injector injector;
+
     public final EntityCentre<AssetClass> centre;
     public final EntityMaster<AssetClass> master;
     public final EntityMaster<OpenAssetClassMasterAction> compoundMaster;
     public final EntityActionConfig editAssetClassAction;
     private final EntityActionConfig newAssetClassAction;
 
-    public static AssetClassWebUiConfig register(final Injector injector, final IWebUiBuilder builder) {
-        return new AssetClassWebUiConfig(injector, builder);
+    public static AssetClassWebUiConfig2 register(final Injector injector, final IWebUiBuilder builder) {
+        return new AssetClassWebUiConfig2(injector, builder);
     }
 
-    private AssetClassWebUiConfig(final Injector injector, final IWebUiBuilder builder) {
+    private AssetClassWebUiConfig2(final Injector injector, final IWebUiBuilder builder) {
         this.injector = injector;
 
         final PrefDim dims = mkDim(960, 640, Unit.PX);
@@ -73,10 +72,10 @@ public class AssetClassWebUiConfig {
         newAssetClassAction = Compound.openNew(OpenAssetClassMasterAction.class, "add-circle-outline", AssetClass.ENTITY_TITLE, actionAddDesc(AssetClass.ENTITY_TITLE), dims);
         builder.registerOpenMasterAction(AssetClass.class, editAssetClassAction);
 
-        centre = createCentre(injector, builder);
+        centre = createCentre(builder);
         builder.register(centre);
 
-        master = createMaster(injector);
+        master = createMaster();
         builder.register(master);
 
         compoundMaster = CompoundMasterBuilder.<AssetClass, OpenAssetClassMasterAction>create(injector, builder)
@@ -100,12 +99,10 @@ public class AssetClassWebUiConfig {
     /**
      * Creates entity centre for {@link AssetClass}.
      *
-     * @param injector
-     * @return created entity centre
+     * @return
      */
-    private EntityCentre<AssetClass> createCentre(final Injector injector, final IWebUiBuilder builder) {
-        final String layout = LayoutComposer.mkGridForCentre(3, 1);
-
+    private EntityCentre<AssetClass> createCentre(final IWebUiBuilder builder) {
+        final String layout = LayoutComposer.mkGridForCentre(1, 2);
         final EntityActionConfig standardDeleteAction = StandardActions.DELETE_ACTION.mkAction(AssetClass.class);
         final EntityActionConfig standardExportAction = StandardActions.EXPORT_ACTION.mkAction(AssetClass.class);
         final EntityActionConfig standardSortAction = CentreConfigActions.CUSTOMISE_COLUMNS_ACTION.mkAction();
@@ -118,8 +115,7 @@ public class AssetClassWebUiConfig {
                 .addTopAction(standardSortAction).also()
                 .addTopAction(standardExportAction)
                 .addCrit("this").asMulti().autocompleter(AssetClass.class).also()
-                .addCrit("desc").asMulti().text().also()
-                .addCrit("active").asMulti().bool()
+                .addCrit("desc").asMulti().text()
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
@@ -127,10 +123,7 @@ public class AssetClassWebUiConfig {
                 .addProp("this").order(1).asc().minWidth(100)
                     .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", AssetClass.ENTITY_TITLE))
                     .withAction(editAssetClassAction).also()
-                .addProp("desc").minWidth(100).also()
-                .addProp("active").width(80)
-                //.addProp("criticality").minWidth(100)
-                //.addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
+                .addProp("desc").minWidth(300)
                 .addPrimaryAction(editAssetClassAction)
                 .build();
 
@@ -140,31 +133,28 @@ public class AssetClassWebUiConfig {
     /**
      * Creates entity master for {@link AssetClass}.
      *
-     * @param injector
-     * @return created entity master
+     * @return
      */
-    private EntityMaster<AssetClass> createMaster(final Injector injector) {
-        final String layout = LayoutComposer.mkGridForMasterFitWidth(3, 1);
+    private EntityMaster<AssetClass> createMaster() {
+        final String layout = LayoutComposer.mkGridForMasterFitWidth(1, 2);
 
         final IMaster<AssetClass> masterConfig = new SimpleMasterBuilder<AssetClass>().forEntity(AssetClass.class)
-                .addProp("name").asSinglelineText().also()
+                .addProp("key").asSinglelineText().also()
                 .addProp("desc").asMultilineText().also()
-                .addProp("active").asCheckbox().also()
                 .addAction(MasterActions.REFRESH).shortDesc("Cancel").longDesc("Cancel action")
                 .addAction(MasterActions.SAVE)
                 .setActionBarLayoutFor(Device.DESKTOP, Optional.empty(), LayoutComposer.mkActionLayoutForMaster())
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
-                .withDimensions(mkDim(LayoutComposer.SIMPLE_ONE_COLUMN_MASTER_DIM_WIDTH, 360, Unit.PX))
                 .done();
 
-        return new EntityMaster<>(AssetClass.class, masterConfig, injector);
+        return new EntityMaster<AssetClass>(AssetClass.class, masterConfig, injector);
     }
-    
+
     private EntityCentre<AssetType> createAssetTypeCentre() {
         final Class<AssetType> root = AssetType.class;
-        final String layout = LayoutComposer.mkVarGridForCentre(1, 1);
+        final String layout = LayoutComposer.mkVarGridForCentre(2, 1);
 
         final EntityActionConfig standardNewAction = StandardActions.NEW_WITH_MASTER_ACTION.mkAction(AssetType.class);
         final EntityActionConfig standardDeleteAction = StandardActions.DELETE_ACTION.mkAction(AssetType.class);
@@ -178,15 +168,17 @@ public class AssetClassWebUiConfig {
                 .addTopAction(standardDeleteAction).also()
                 .addTopAction(standardSortAction).also()
                 .addTopAction(standardExportAction)
-                .addCrit("this").asMulti().autocompleter(AssetType.class)
+                .addCrit("crit1").asMulti()/*.autocompleter(Crit1.class)*/.text().also()
+                .addCrit("crit2").asMulti()/*.autocompleter(Crit2.class)*/.text().also()
+                .addCrit("crit3").asRange().integer()
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
                 .withScrollingConfig(standardEmbeddedScrollingConfig(0))
-                .addProp("this").order(1).asc().minWidth(80)
+                .addProp("prop1").order(1).asc().minWidth(80)
                     .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", AssetType.ENTITY_TITLE)).also()
-                .addProp("desc").minWidth(80).also()
-                .addProp("active").minWidth(80)
+                .addProp("prop2").minWidth(80).also()
+                .addProp("prop3").minWidth(80)
                 .addPrimaryAction(standardEditAction)
                 .setQueryEnhancer(AssetClassMaster_AssetTypeCentre_QueryEnhancer.class, context().withMasterEntity().build())
                 .build();
@@ -200,4 +192,5 @@ public class AssetClassWebUiConfig {
             return enhanceEmbededCentreQuery(where, createConditionProperty("assetClass"), context.get().getMasterEntity().getKey());
         }
     }
+
 }

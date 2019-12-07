@@ -2,7 +2,6 @@ package newyork.tablescodes.assets;
 
 import newyork.tablescodes.validators.LongerThanValidator;
 import newyork.tablescodes.validators.NoSpacesValidator;
-import ua.com.fielden.platform.entity.AbstractEntity;
 import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.CompanionObject;

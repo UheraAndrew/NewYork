@@ -9,6 +9,7 @@ import com.google.inject.Injector;
 
 import newyork.tablescodes.assets.AssetClass;
 import newyork.tablescodes.assets.AssetType;
+import newyork.tablescodes.assets.producers.AssetTypeProducer;
 import newyork.common.LayoutComposer;
 import newyork.common.StandardActions;
 
@@ -115,6 +116,6 @@ public class AssetTypeWebUiConfig {
                 .withDimensions(mkDim(LayoutComposer.SIMPLE_ONE_COLUMN_MASTER_DIM_WIDTH, 480, Unit.PX))
                 .done();
 
-        return new EntityMaster<>(AssetType.class, masterConfig, injector);
+        return new EntityMaster<>(AssetType.class, AssetTypeProducer.class, masterConfig, injector);
     }
 }
