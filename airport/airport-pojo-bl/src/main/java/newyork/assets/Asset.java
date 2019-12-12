@@ -53,6 +53,13 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     public String getNumber() {
         return number;
     }
+    
+    @Override
+    @Observable
+    public Asset setDesc(final String desc) {
+        super.setDesc(desc);
+        return this;
+    } 
 
     
 
