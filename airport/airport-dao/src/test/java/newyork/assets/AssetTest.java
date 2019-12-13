@@ -20,6 +20,9 @@ import ua.com.fielden.platform.utils.IUniversalConstants;
  * @author New-York-Team
  *
  */
+
+// The most useful and secret test ever! 
+
 public class AssetTest extends AbstractDaoTestCase {
 
     @Test
