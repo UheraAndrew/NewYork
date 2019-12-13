@@ -16,7 +16,7 @@ import ua.com.fielden.platform.keygen.KeyNumber;
 /**
  * DAO implementation for companion object {@link IAsset}.
  *
- * @author Developers
+ * @author New York
  *
  */
 @EntityType(Asset.class)
