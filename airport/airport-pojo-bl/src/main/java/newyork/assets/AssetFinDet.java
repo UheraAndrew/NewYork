@@ -45,8 +45,8 @@ public class AssetFinDet extends AbstractPersistentEntity<Asset> {
     private Money initCost;
     
     @IsProperty
-    @DateOnly
     @MapTo
+    @DateOnly
     @Title(value = "Acquire Date", desc = "The date when asset was made ot purchased.")
     private Date acquireDate;
     
