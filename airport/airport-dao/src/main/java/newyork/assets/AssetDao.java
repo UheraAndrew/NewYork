@@ -44,7 +44,12 @@ public class AssetDao extends CommonEntityDao<Asset> implements IAsset {
             asset.setNumber(nextNumber.toString());
         }
         // TODO: length of six, to have not numbers but strings in form like 000001 or 000101
-        return super.save(asset);
+        final Asset savedAsset = super.save(asset);
+        
+    	final AssetFinDet finDet = co(AssetFinDet.class).new_().setKey(savedAsset);
+    	co$(AssetFinDet.class).save(finDet);
+    	
+        return savedAsset;
     }
     
     @SessionRequired
