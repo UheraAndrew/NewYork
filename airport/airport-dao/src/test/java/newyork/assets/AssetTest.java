@@ -11,6 +11,7 @@ import org.junit.Test;
 import newyork.tablescodes.assets.AssetClass;
 import newyork.test_config.AbstractDaoTestCase;
 import newyork.test_config.UniversalConstantsForTesting;
+import ua.com.fielden.platform.dao.exceptions.EntityAlreadyExists;
 import ua.com.fielden.platform.error.Result;
 import ua.com.fielden.platform.utils.IUniversalConstants;
 
@@ -20,6 +21,9 @@ import ua.com.fielden.platform.utils.IUniversalConstants;
  * @author New-York-Team
  *
  */
+
+// The most useful and secret test ever! 
+
 public class AssetTest extends AbstractDaoTestCase {
 
     @Test
@@ -109,6 +113,36 @@ public class AssetTest extends AbstractDaoTestCase {
         assertEquals("2", savedAssetByUser1.getNumber());
     }
     
+    @Test 
+    public void asset_fin_det_is_created_and_saved_at_the_same_time_as_asset() {
+        final Asset asset = save(new_(Asset.class).setDesc("a demo asset"));
+        assertTrue(co(Asset.class).entityExists(asset));
+        assertTrue(co(AssetFinDet.class).entityExists(asset.getId()));
+    }
+
+    @Test 
+    public void no_fin_det_is_created_and_saved_when_existing_asset_gets_saved() {
+        final Asset asset = save(new_(Asset.class).setDesc("a demo asset"));
+        assertEquals(Long.valueOf(0), asset.getVersion());
+
+        final AssetFinDet finDet = co(AssetFinDet.class).findById(asset.getId());
+        assertEquals(Long.valueOf(0), finDet.getVersion());
+
+        assertEquals(Long.valueOf(1), save(asset.setDesc("another description")).getVersion());
+        assertEquals(Long.valueOf(0), co(AssetFinDet.class).findById(finDet.getId()).getVersion());
+    }
+    
+    @Test
+    public void duplicate_fin_det_for_the_same_asset_is_not_permited() {
+        final Asset asset = save(new_(Asset.class).setDesc("a demo asset"));
+        final AssetFinDet newFinDet = new_(AssetFinDet.class).setKey(asset);
+        try {
+            save(newFinDet);
+            fail("Should have failed due to duplicate instances.");
+        } catch(final EntityAlreadyExists ex) {
+        }
+    }
+
     @Override
     public boolean saveDataPopulationScriptToFile() {
         return false;
@@ -116,7 +150,7 @@ public class AssetTest extends AbstractDaoTestCase {
 
     @Override
     public boolean useSavedDataPopulationScript() {
-        return true;
+        return false;
     }
 
     @Override

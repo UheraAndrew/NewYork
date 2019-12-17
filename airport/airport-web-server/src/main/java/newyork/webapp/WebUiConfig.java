@@ -3,16 +3,18 @@ package newyork.webapp;
 import org.apache.commons.lang.StringUtils;
 
 import newyork.assets.Asset;
+import newyork.assets.AssetFinDet;
 import newyork.config.personnel.PersonWebUiConfig;
 import newyork.tablescodes.assets.AssetClass;
 import newyork.tablescodes.assets.AssetType;
 import newyork.tablescodes.assets.ConditionRating;
 import newyork.tablescodes.assets.ServiceStatus;
+import newyork.webapp.config.assets.AssetFinDetWebUiConfig;
 import newyork.webapp.config.assets.AssetWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.AssetClassWebUiConfig;
-import newyork.webapp.config.tablescodes.assets.ServiceStatusWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.AssetTypeWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.ConditionRatingWebUiConfig;
+import newyork.webapp.config.tablescodes.assets.ServiceStatusWebUiConfig;
 import ua.com.fielden.platform.basic.config.Workflows;
 import ua.com.fielden.platform.web.app.config.IWebUiBuilder;
 import ua.com.fielden.platform.web.interfaces.ILayout.Device;
@@ -87,6 +89,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
         
         // Asset
         final AssetWebUiConfig assetWebUiConfig = AssetWebUiConfig.register(injector(), builder);
+        final AssetFinDetWebUiConfig assetFinDetWebUiConfig = AssetFinDetWebUiConfig.register(injector(), builder);
         
         // Configure application web resources such as masters and centres
         configApp()
@@ -108,6 +111,8 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 captionBgColor("#FFD42A").menu()
                 .addMenuItem(Asset.ENTITY_TITLE).description(String.format("%s Centre", 
                         Asset.ENTITY_TITLE)).centre(assetWebUiConfig.centre).done()
+                .addMenuItem(AssetFinDet.ENTITY_TITLE).description(String.format("%s Centre", 
+                		AssetFinDet.ENTITY_TITLE)).centre(assetFinDetWebUiConfig.centre).done()
             .done().done().
                 
             addModule("Users / Personnel").
