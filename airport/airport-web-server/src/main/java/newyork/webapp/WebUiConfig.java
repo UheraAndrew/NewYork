@@ -5,12 +5,14 @@ import org.apache.commons.lang.StringUtils;
 import newyork.assets.Asset;
 import newyork.assets.AssetFinDet;
 import newyork.config.personnel.PersonWebUiConfig;
+import newyork.projects.Project;
 import newyork.tablescodes.assets.AssetClass;
 import newyork.tablescodes.assets.AssetType;
 import newyork.tablescodes.assets.ConditionRating;
 import newyork.tablescodes.assets.ServiceStatus;
 import newyork.webapp.config.assets.AssetFinDetWebUiConfig;
 import newyork.webapp.config.assets.AssetWebUiConfig;
+import newyork.webapp.config.projects.ProjectWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.AssetClassWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.AssetTypeWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.ConditionRatingWebUiConfig;
@@ -91,6 +93,9 @@ public class WebUiConfig extends AbstractWebUiConfig {
         final AssetWebUiConfig assetWebUiConfig = AssetWebUiConfig.register(injector(), builder);
         final AssetFinDetWebUiConfig assetFinDetWebUiConfig = AssetFinDetWebUiConfig.register(injector(), builder);
         
+        // Project related UI
+        final ProjectWebUiConfig projectWebUiConfig = ProjectWebUiConfig.register(injector(), builder);
+        
         // Configure application web resources such as masters and centres
         configApp()
         .addMaster(userWebUiConfig.master)
@@ -109,10 +114,9 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 detailIcon("mainMenu:equipment").
                 bgColor("#80d6ff").
                 captionBgColor("#42a5f5").menu()
-                .addMenuItem(Asset.ENTITY_TITLE).description(String.format("%s Centre", 
-                        Asset.ENTITY_TITLE)).centre(assetWebUiConfig.centre).done()
-                .addMenuItem(AssetFinDet.ENTITY_TITLE).description(String.format("%s Centre", 
-                		AssetFinDet.ENTITY_TITLE)).centre(assetFinDetWebUiConfig.centre).done()
+                .addMenuItem(Asset.ENTITY_TITLE).description(String.format("%s Centre", Asset.ENTITY_TITLE)).centre(assetWebUiConfig.centre).done()
+                .addMenuItem(AssetFinDet.ENTITY_TITLE).description(String.format("%s Centre", AssetFinDet.ENTITY_TITLE)).centre(assetFinDetWebUiConfig.centre).done()
+                .addMenuItem(Project.ENTITY_TITLE).description(String.format("%s Centre", Project.ENTITY_TITLE)).centre(projectWebUiConfig.centre).done()
             .done().done().
                 
             addModule("Users / Personnel").
