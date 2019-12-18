@@ -11,6 +11,9 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.H2Dialect;
 
+import newyork.assets.Asset;
+import newyork.assets.AssetFinDet;
+import newyork.assets.IAssetFinDet;
 import newyork.config.ApplicationDomain;
 import newyork.personnel.Person;
 import newyork.tablescodes.assets.AssetClass;
@@ -20,6 +23,7 @@ import ua.com.fielden.platform.entity.AbstractEntity;
 import ua.com.fielden.platform.persistence.HibernateUtil;
 import ua.com.fielden.platform.security.user.User;
 import ua.com.fielden.platform.test.IDomainDrivenTestCaseConfiguration;
+import ua.com.fielden.platform.types.Money;
 import ua.com.fielden.platform.utils.DbUtils;
 
 /**
@@ -83,6 +87,17 @@ public class PopulateDb extends DomainDrivenDataPopulation {
         final AssetClass ac1 = save(new_(AssetClass.class).setName("AC1").setDesc("some description").setActive(true));
         save(new_(AssetClass.class).setName("AC2").setDesc("some description2").setActive(false));
         save(new_(AssetType.class).setName("AT1").setDesc("some description2").setAssetClass(ac1));
+        
+        final Asset asset1 = save(new_(Asset.class).setDesc("a demo asset 1"));
+        final Asset asset2 = save(new_(Asset.class).setDesc("a demo asset 2"));
+        final Asset asset3 = save(new_(Asset.class).setDesc("a demo asset 3"));
+        
+        final AssetFinDet finDet1 = co$(AssetFinDet.class).findById(asset1.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel());
+        save(finDet1.setInitCost(Money.of("120.00")).setAcquireDate(date("2019-12-07 00:00:00")));
+        final AssetFinDet finDet2 = co$(AssetFinDet.class).findById(asset2.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel());
+        save(finDet2.setInitCost(Money.of("100.00")).setAcquireDate(date("2019-11-01 00:00:00")));
+        final AssetFinDet finDet3 = co$(AssetFinDet.class).findById(asset3.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel());
+        save(finDet3.setInitCost(Money.of("10.00")).setAcquireDate(date("2018-11-01 00:00:00")));
         
         
         LOGGER.info("Completed database creation and population.");

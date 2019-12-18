@@ -107,8 +107,8 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 description("Asset acquisition module").
                 icon("mainMenu:equipment").
                 detailIcon("mainMenu:equipment").
-                bgColor("#FFE680").
-                captionBgColor("#FFD42A").menu()
+                bgColor("#80d6ff").
+                captionBgColor("#42a5f5").menu()
                 .addMenuItem(Asset.ENTITY_TITLE).description(String.format("%s Centre", 
                         Asset.ENTITY_TITLE)).centre(assetWebUiConfig.centre).done()
                 .addMenuItem(AssetFinDet.ENTITY_TITLE).description(String.format("%s Centre", 
@@ -119,8 +119,8 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 description("Provides functionality for managing application security and personnel data.").
                 icon("mainMenu:help").
                 detailIcon("mainMenu:about").
-                bgColor("#FFE680").
-                captionBgColor("#FFD42A").menu()
+                bgColor("#c8ff75").
+                captionBgColor("#94ce44").menu()
                 
                 .addMenuItem("Personnel").description("Personnel related data")
                     .addMenuItem("Personnel").description("Personnel Centre").centre(personWebUiConfig.centre).done()
