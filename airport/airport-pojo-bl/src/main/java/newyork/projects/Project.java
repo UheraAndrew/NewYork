@@ -27,7 +27,7 @@ import ua.com.fielden.platform.utils.Pair;
 /**
  * Master entity object.
  *
- * @author Developers
+ * @author NewYork Team
  *
  */
 @KeyType(DynamicEntityKey.class)
