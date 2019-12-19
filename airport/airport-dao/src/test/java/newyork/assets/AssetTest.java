@@ -1,23 +1,10 @@
 package newyork.assets;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.cond;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.expr;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchAggregates;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchAll;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchAllAndInstrument;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchAllInclCalc;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchAllInclCalcAndInstrument;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchAndInstrument;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchIdOnly;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchKeyAndDescOnly;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchKeyAndDescOnlyAndInstrument;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchOnly;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchOnlyAndInstrument;
 import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.from;
 import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.orderBy;
 import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.select;
@@ -32,10 +19,7 @@ import newyork.tablescodes.assets.AssetClass;
 import newyork.test_config.AbstractDaoTestCase;
 import newyork.test_config.UniversalConstantsForTesting;
 import ua.com.fielden.platform.dao.QueryExecutionModel;
-import ua.com.fielden.platform.dao.exceptions.EntityAlreadyExists;
-import ua.com.fielden.platform.entity.query.fluent.fetch;
 import ua.com.fielden.platform.entity.query.model.EntityResultQueryModel;
-import ua.com.fielden.platform.entity.query.model.OrderingModel;
 import ua.com.fielden.platform.error.Result;
 import ua.com.fielden.platform.types.Money;
 import ua.com.fielden.platform.utils.IUniversalConstants;
@@ -138,37 +122,6 @@ public class AssetTest extends AbstractDaoTestCase {
         assertTrue(savedAssetByUser1.isPersisted());
         assertTrue(co$.entityExists(savedAssetByUser1));
         assertEquals("2", savedAssetByUser1.getNumber());
-    }
-    
-    @Test 
-    public void asset_fin_det_is_created_and_saved_at_the_same_time_as_asset() {
-        final Asset asset = save(new_(Asset.class).setDesc("a demo asset"));
-        assertTrue(co(Asset.class).entityExists(asset));
-        assertTrue(co(AssetFinDet.class).entityExists(asset.getId()));
-    }
-
-    @Test 
-    @Ignore
-    public void no_fin_det_is_created_and_saved_when_existing_asset_gets_saved() {
-        final Asset asset = save(new_(Asset.class).setDesc("a demo asset"));
-        assertEquals(Long.valueOf(0), asset.getVersion());
-
-        final AssetFinDet finDet = co(AssetFinDet.class).findById(asset.getId());
-        assertEquals(Long.valueOf(0), finDet.getVersion());
-
-        assertEquals(Long.valueOf(1), save(asset.setDesc("another description")).getVersion());
-        assertEquals(Long.valueOf(0), co(AssetFinDet.class).findById(finDet.getId()).getVersion());
-    }
-    
-    @Test
-    public void duplicate_fin_det_for_the_same_asset_is_not_permited() {
-        final Asset asset = save(new_(Asset.class).setDesc("a demo asset"));
-        final AssetFinDet newFinDet = new_(AssetFinDet.class).setKey(asset);
-        try {
-            save(newFinDet);
-            fail("Should have failed due to duplicate instances.");
-        } catch(final EntityAlreadyExists ex) {
-        }
     }
     
     @Test
