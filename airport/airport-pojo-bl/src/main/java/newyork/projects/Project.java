@@ -30,7 +30,7 @@ import ua.com.fielden.platform.utils.Pair;
 /**
  * Master entity object.
  *
- * @author NewYork Team
+ * @author NewYork team
  *
  */
 @KeyType(DynamicEntityKey.class)
