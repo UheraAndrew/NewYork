@@ -13,5 +13,5 @@ import ua.com.fielden.platform.dao.IEntityDao;
 public interface IAssetFinDet extends IEntityDao<AssetFinDet> {
 
     static final IFetchProvider<AssetFinDet> FETCH_PROVIDER = EntityUtils.fetch(AssetFinDet.class)
-    		.with("key", "initCost", "acquireDate");
+    		.with("key", "initCost", "acquireDate", "project.startDate");
 }

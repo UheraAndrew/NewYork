@@ -15,8 +15,8 @@ import newyork.personnel.Person;
 import newyork.test_config.UniversalConstantsForTesting;
 
 /**
- * This calss should be used as the base type for all domain-driven test cases. 
- * Its main purpose is to be a common layer for providing functionaity common to most if not all test cases, and to be easily extensible if application changes are needed.
+ * This class should be used as the base type for all domain-driven test cases. 
+ * Its main purpose is to be a common layer for providing functionality common to most if not all test cases, and to be easily extensible if application changes are needed.
  * 
  * @author Generated
  *

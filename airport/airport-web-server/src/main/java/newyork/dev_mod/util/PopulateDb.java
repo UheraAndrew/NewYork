@@ -16,6 +16,7 @@ import newyork.assets.AssetFinDet;
 import newyork.assets.IAssetFinDet;
 import newyork.config.ApplicationDomain;
 import newyork.personnel.Person;
+import newyork.projects.Project;
 import newyork.tablescodes.assets.AssetClass;
 import newyork.tablescodes.assets.AssetType;
 import ua.com.fielden.platform.devdb_support.DomainDrivenDataPopulation;
@@ -97,8 +98,10 @@ public class PopulateDb extends DomainDrivenDataPopulation {
         final AssetFinDet finDet2 = co$(AssetFinDet.class).findById(asset2.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel());
         save(finDet2.setInitCost(Money.of("100.00")).setAcquireDate(date("2019-11-01 00:00:00")));
         final AssetFinDet finDet3 = co$(AssetFinDet.class).findById(asset3.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel());
-        save(finDet3.setInitCost(Money.of("10.00")).setAcquireDate(date("2018-11-01 00:00:00")));
+        save(finDet3.setInitCost(Money.of("10.00")));
         
+        save(new_(Project.class).setName("Project 1").setStartDate(date("2019-12-08 00:00:00")).setDesc("Project 1 description"));
+        save(new_(Project.class).setName("Project 2").setStartDate(date("2020-01-02 00:00:00")).setDesc("Project 2 description"));
         
         LOGGER.info("Completed database creation and population.");
 	}
