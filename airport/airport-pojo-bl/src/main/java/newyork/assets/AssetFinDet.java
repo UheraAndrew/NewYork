@@ -2,7 +2,7 @@ package newyork.assets;
 
 import java.util.Date;
 
-import newyork.assets.validators.AssetFinDetAcquireDateWithinProjectPeriod;
+import newyork.assets.validators.AssetFinDetAcquireDateWithinProjectPeriodValidator;
 import newyork.projects.Project;
 import ua.com.fielden.platform.entity.AbstractPersistentEntity;
 import ua.com.fielden.platform.entity.annotation.CompanionObject;
@@ -52,7 +52,7 @@ public class AssetFinDet extends AbstractPersistentEntity<Asset> {
     @MapTo
     @DateOnly
     @Title(value = "Acquire Date", desc = "The date when asset was made ot purchased.")
-    @BeforeChange(@Handler(AssetFinDetAcquireDateWithinProjectPeriod.class))
+    @BeforeChange(@Handler(AssetFinDetAcquireDateWithinProjectPeriodValidator.class))
     private Date acquireDate;
     
     

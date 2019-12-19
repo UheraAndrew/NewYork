@@ -1,44 +1,20 @@
 package newyork.projects;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.cond;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.expr;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchAggregates;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchAll;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchAllAndInstrument;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchAllInclCalc;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchAllInclCalcAndInstrument;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchAndInstrument;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchIdOnly;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchKeyAndDescOnly;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchKeyAndDescOnlyAndInstrument;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchOnly;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetchOnlyAndInstrument;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.from;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.orderBy;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.select;
-import static ua.com.fielden.platform.utils.EntityUtils.fetch;
 
-import java.util.List;
-
-import org.junit.Ignore;
 import org.junit.Test;
 
+import newyork.assets.Asset;
+import newyork.assets.AssetFinDet;
+import newyork.assets.IAssetFinDet;
+import newyork.projects.validators.ProjectStartAndFinishDatesValidator;
 import newyork.tablescodes.assets.AssetClass;
 import newyork.test_config.AbstractDaoTestCase;
 import newyork.test_config.UniversalConstantsForTesting;
-import ua.com.fielden.platform.dao.QueryExecutionModel;
-import ua.com.fielden.platform.dao.exceptions.EntityAlreadyExists;
-import ua.com.fielden.platform.entity.query.fluent.fetch;
-import ua.com.fielden.platform.entity.query.model.EntityResultQueryModel;
-import ua.com.fielden.platform.entity.query.model.OrderingModel;
 import ua.com.fielden.platform.error.Result;
-import ua.com.fielden.platform.types.Money;
 import ua.com.fielden.platform.utils.IUniversalConstants;
 
 /**
@@ -81,6 +57,44 @@ public class ProjectTest extends AbstractDaoTestCase {
         assertEquals("Required property [Start Date] is not specified for entity [Project].", validationResult.getMessage());
         
         project.setStartDate(date("2019-10-01 00:00:00"));
+        assertTrue(project.isValid().isSuccessful());
+    }
+    
+    @Test
+    public void start_date_cannot_be_assigned_if_new_value_is_after_acquired_date_for_associated_assets() {
+        final Project project = save(new_(Project.class).setName("PROJECT 1").setStartDate(date("2019-10-01 00:00:00")).setDesc("Project 1 description"));
+        
+        final Asset asset1 = save(new_(Asset.class).setDesc("first asset"));
+        save(co$(AssetFinDet.class).findById(asset1.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2019-10-02 00:00:00")).setProject(project));
+        final Asset asset2 = save(new_(Asset.class).setDesc("second asset"));
+        save(co$(AssetFinDet.class).findById(asset2.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2019-11-02 00:00:00")).setProject(project));
+        final Asset asset3 = save(new_(Asset.class).setDesc("third asset"));
+        save(co$(AssetFinDet.class).findById(asset3.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2020-01-02 00:00:00")).setProject(project));
+
+        project.setStartDate(date("2019-11-01 00:00:00"));
+        assertFalse(project.isValid().isSuccessful());
+        assertEquals(ProjectStartAndFinishDatesValidator.ERR_OUTSIDE_NEW_PERIOD_DUE_TO_START_DATE, project.isValid().getMessage());
+    }
+    
+    @Test
+    public void finish_date_cannot_be_assigned_if_new_value_is_before_acquired_date_for_associated_assets() {
+        final Project project = save(new_(Project.class).setName("PROJECT 1")
+                .setStartDate(date("2019-10-01 00:00:00"))
+                .setFinishDate(date("2020-10-01 00:00:00"))
+                .setDesc("Project 1 description"));
+        
+        final Asset asset1 = save(new_(Asset.class).setDesc("first asset"));
+        save(co$(AssetFinDet.class).findById(asset1.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2019-10-02 00:00:00")).setProject(project));
+        final Asset asset2 = save(new_(Asset.class).setDesc("second asset"));
+        save(co$(AssetFinDet.class).findById(asset2.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2019-11-02 00:00:00")).setProject(project));
+        final Asset asset3 = save(new_(Asset.class).setDesc("third asset"));
+        save(co$(AssetFinDet.class).findById(asset3.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2020-01-02 00:00:00")).setProject(project));
+
+        project.setFinishDate(date("2020-01-01 00:00:00"));
+        assertFalse(project.isValid().isSuccessful());
+        assertEquals(ProjectStartAndFinishDatesValidator.ERR_OUTSIDE_NEW_PERIOD_DUE_TO_FINISH_DATE, project.isValid().getMessage());
+        
+        project.setFinishDate(null);
         assertTrue(project.isValid().isSuccessful());
     }
 

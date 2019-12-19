@@ -8,7 +8,7 @@ import static org.junit.Assert.fail;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import newyork.assets.validators.AssetFinDetAcquireDateWithinProjectPeriod;
+import newyork.assets.validators.AssetFinDetAcquireDateWithinProjectPeriodValidator;
 import newyork.projects.Project;
 import newyork.tablescodes.assets.AssetClass;
 import newyork.test_config.AbstractDaoTestCase;
@@ -42,7 +42,7 @@ public class AssetFinDetTest extends AbstractDaoTestCase {
         finDet.setAcquireDate(date("2019-10-10 00:00:00"));
         assertFalse(finDet.isValid().isSuccessful());
         assertEquals(date("2019-12-10 00:00:00"), finDet.getAcquireDate());
-        assertEquals(AssetFinDetAcquireDateWithinProjectPeriod.ERR_OUTSIDE_PROJECT_PERIOD, finDet.isValid().getMessage());
+        assertEquals(AssetFinDetAcquireDateWithinProjectPeriodValidator.ERR_OUTSIDE_PROJECT_PERIOD, finDet.isValid().getMessage());
     }
     
     @Test 
@@ -57,7 +57,7 @@ public class AssetFinDetTest extends AbstractDaoTestCase {
         finDet.setProject(project);
         assertFalse(finDet.isValid().isSuccessful());
         assertEquals(project, finDet.getProject());
-        assertEquals(AssetFinDetAcquireDateWithinProjectPeriod.ERR_OUTSIDE_PROJECT_PERIOD, finDet.isValid().getMessage());
+        assertEquals(AssetFinDetAcquireDateWithinProjectPeriodValidator.ERR_OUTSIDE_PROJECT_PERIOD, finDet.isValid().getMessage());
     }
     
     @Test
@@ -78,7 +78,7 @@ public class AssetFinDetTest extends AbstractDaoTestCase {
         finDet.setAcquireDate(date("2020-12-10 00:00:00"));
         assertFalse(finDet.isValid().isSuccessful());
         assertEquals(date("2019-12-10 00:00:00"), finDet.getAcquireDate());
-        assertEquals(AssetFinDetAcquireDateWithinProjectPeriod.ERR_OUTSIDE_PROJECT_PERIOD, finDet.isValid().getMessage());
+        assertEquals(AssetFinDetAcquireDateWithinProjectPeriodValidator.ERR_OUTSIDE_PROJECT_PERIOD, finDet.isValid().getMessage());
     }
 
     @Test 
