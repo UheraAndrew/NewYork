@@ -15,6 +15,9 @@ import newyork.assets.Asset;
 import newyork.assets.AssetFinDet;
 import newyork.assets.IAssetFinDet;
 import newyork.config.ApplicationDomain;
+import newyork.organisational.BusinessUnit;
+import newyork.organisational.Organisation;
+import newyork.organisational.Role;
 import newyork.personnel.Person;
 import newyork.projects.Project;
 import newyork.tablescodes.assets.AssetClass;
@@ -85,10 +88,12 @@ public class PopulateDb extends DomainDrivenDataPopulation {
         setupUser(User.system_users.SU, "newyork");
         setupPerson(User.system_users.SU, "newyork");
         
-        final AssetClass ac1 = save(new_(AssetClass.class).setName("AC1").setDesc("some description").setActive(true));
-        save(new_(AssetClass.class).setName("AC2").setDesc("some description2").setActive(false));
-        save(new_(AssetType.class).setName("AT1").setDesc("some description2").setAssetClass(ac1));
+        // Asset table codes
+        final AssetClass ac1 = save(new_(AssetClass.class).setName("AC1").setDesc("asset class 1").setActive(true));
+        save(new_(AssetClass.class).setName("AC2").setDesc("asset class 2").setActive(true));
+        save(new_(AssetType.class).setName("AT1").setDesc("asset type 1").setAssetClass(ac1).setActive(true));
         
+        // Assets
         final Asset asset1 = save(new_(Asset.class).setDesc("a demo asset 1"));
         final Asset asset2 = save(new_(Asset.class).setDesc("a demo asset 2"));
         final Asset asset3 = save(new_(Asset.class).setDesc("a demo asset 3"));
@@ -100,8 +105,14 @@ public class PopulateDb extends DomainDrivenDataPopulation {
         final AssetFinDet finDet3 = co$(AssetFinDet.class).findById(asset3.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel());
         save(finDet3.setInitCost(Money.of("10.00")));
         
+        // Projects
         save(new_(Project.class).setName("Project 1").setStartDate(date("2019-12-08 00:00:00")).setDesc("Project 1 description"));
         save(new_(Project.class).setName("Project 2").setStartDate(date("2020-01-02 00:00:00")).setDesc("Project 2 description"));
+        
+        // for AssetTypeOwnership
+        save(new_(Role.class).setName("R1").setDesc("First role"));
+        save(new_(BusinessUnit.class).setName("BU1").setDesc("First business unit"));
+        save(new_(Organisation.class).setName("ORG1").setDesc("First organisation"));
         
         LOGGER.info("Completed database creation and population.");
 	}

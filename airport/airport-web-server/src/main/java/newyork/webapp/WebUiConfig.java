@@ -8,12 +8,14 @@ import newyork.config.personnel.PersonWebUiConfig;
 import newyork.projects.Project;
 import newyork.tablescodes.assets.AssetClass;
 import newyork.tablescodes.assets.AssetType;
+import newyork.tablescodes.assets.AssetTypeOwnership;
 import newyork.tablescodes.assets.ConditionRating;
 import newyork.tablescodes.assets.ServiceStatus;
 import newyork.webapp.config.assets.AssetFinDetWebUiConfig;
 import newyork.webapp.config.assets.AssetWebUiConfig;
 import newyork.webapp.config.projects.ProjectWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.AssetClassWebUiConfig;
+import newyork.webapp.config.tablescodes.assets.AssetTypeOwnershipWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.AssetTypeWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.ConditionRatingWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.ServiceStatusWebUiConfig;
@@ -88,6 +90,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
         final AssetTypeWebUiConfig assetTypeWebUiConfig = AssetTypeWebUiConfig.register(injector(), builder);
         final ServiceStatusWebUiConfig serviceStatusWebUiConfig = ServiceStatusWebUiConfig.register(injector(), builder); 
         final ConditionRatingWebUiConfig conditionRatingWebUiConfig = ConditionRatingWebUiConfig.register(injector(), builder);
+        final AssetTypeOwnershipWebUiConfig assetTypeOwnershipWebUiConfig = AssetTypeOwnershipWebUiConfig.register(injector(), builder);
         
         // Asset
         final AssetWebUiConfig assetWebUiConfig = AssetWebUiConfig.register(injector(), builder);
@@ -134,6 +137,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
                     .addMenuItem("Users").description("User centre").centre(userWebUiConfig.centre).done()
                     .addMenuItem("User Roles").description("User roles centre").centre(userRoleWebUiConfig.centre).done()
                 .done()
+                
             .done().done().
             
             addModule("Table Codes").
@@ -143,14 +147,11 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 bgColor("#FFE680").
                 captionBgColor("#FFD42A").menu()
             .addMenuItem("Asset Table Codes").description("Various master data for assets.")
-                .addMenuItem(AssetClass.ENTITY_TITLE).description(String.format("%s Centre", AssetClass.ENTITY_TITLE))
-                .centre(assetClassWebUiConfig.centre).done()
-                .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", AssetType.ENTITY_TITLE))
-                .centre(assetTypeWebUiConfig.centre).done()
-                .addMenuItem(ServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", 
-                        ServiceStatus.ENTITY_TITLE)).centre(serviceStatusWebUiConfig.centre).done()
-                .addMenuItem(ConditionRating.ENTITY_TITLE).description(String.format("%s Centre", 
-                    ConditionRating.ENTITY_TITLE)).centre(conditionRatingWebUiConfig.centre).done()
+                .addMenuItem(AssetClass.ENTITY_TITLE).description(String.format("%s Centre", AssetClass.ENTITY_TITLE)).centre(assetClassWebUiConfig.centre).done()
+                .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", AssetType.ENTITY_TITLE)).centre(assetTypeWebUiConfig.centre).done()
+                .addMenuItem(ServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", ServiceStatus.ENTITY_TITLE)).centre(serviceStatusWebUiConfig.centre).done()
+                .addMenuItem(ConditionRating.ENTITY_TITLE).description(String.format("%s Centre", ConditionRating.ENTITY_TITLE)).centre(conditionRatingWebUiConfig.centre).done()
+                .addMenuItem(AssetTypeOwnership.ENTITY_TITLE).description(String.format("%s Centre", AssetTypeOwnership.ENTITY_TITLE)).centre(assetTypeOwnershipWebUiConfig.centre).done()
             .done().
             done().done()
         .setLayoutFor(Device.DESKTOP, null, "[[[{\"rowspan\":2}], []], [[]]]")
