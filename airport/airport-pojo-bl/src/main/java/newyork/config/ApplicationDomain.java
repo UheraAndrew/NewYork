@@ -14,6 +14,10 @@ import newyork.tablescodes.assets.AssetClass;
 import newyork.tablescodes.assets.ServiceStatus;
 import newyork.tablescodes.assets.AssetType;
 import newyork.tablescodes.assets.ConditionRating;
+import newyork.assets.Asset;
+import newyork.tablescodes.assets.ui_actions.OpenAssetClassMasterAction;
+import newyork.tablescodes.assets.master.menu.actions.AssetClassMaster_OpenMain_MenuItem;
+import newyork.tablescodes.assets.master.menu.actions.AssetClassMaster_OpenAssetType_MenuItem;
 
 /**
  * A class to register domain entities.
@@ -22,17 +26,17 @@ import newyork.tablescodes.assets.ConditionRating;
  * 
  */
 public class ApplicationDomain implements IApplicationDomainProvider {
-	private static final Set<Class<? extends AbstractEntity<?>>> entityTypes = new LinkedHashSet<>();
-	private static final Set<Class<? extends AbstractEntity<?>>> domainTypes = new LinkedHashSet<>();
+    private static final Set<Class<? extends AbstractEntity<?>>> entityTypes = new LinkedHashSet<>();
+    private static final Set<Class<? extends AbstractEntity<?>>> domainTypes = new LinkedHashSet<>();
 
-	private static void add(final Class<? extends AbstractEntity<?>> domainType) {
-		entityTypes.add(domainType);
-		domainTypes.add(domainType);
-	}
+    private static void add(final Class<? extends AbstractEntity<?>> domainType) {
+        entityTypes.add(domainType);
+        domainTypes.add(domainType);
+    }
 
     /**
-             * This is a static initialisation block where all entity types should be registered.
-             */
+                             * This is a static initialisation block where all entity types should be registered.
+                             */
     static {
         entityTypes.addAll(PlatformDomainTypes.types);
         add(Person.class);
@@ -40,14 +44,18 @@ public class ApplicationDomain implements IApplicationDomainProvider {
         add(AssetType.class);
         add(ServiceStatus.class);
         add(ConditionRating.class);
+        add(Asset.class);
+        add(OpenAssetClassMasterAction.class);
+        add(AssetClassMaster_OpenMain_MenuItem.class);
+        add(AssetClassMaster_OpenAssetType_MenuItem.class);
     }
 
-	@Override
-	public List<Class<? extends AbstractEntity<?>>> entityTypes() {
-		return Collections.unmodifiableList(entityTypes.stream().collect(Collectors.toList()));
-	}
+    @Override
+    public List<Class<? extends AbstractEntity<?>>> entityTypes() {
+        return Collections.unmodifiableList(entityTypes.stream().collect(Collectors.toList()));
+    }
 
-	public List<Class<? extends AbstractEntity<?>>> domainTypes() {
-		return Collections.unmodifiableList(domainTypes.stream().collect(Collectors.toList()));
-	}
+    public List<Class<? extends AbstractEntity<?>>> domainTypes() {
+        return Collections.unmodifiableList(domainTypes.stream().collect(Collectors.toList()));
+    }
 }

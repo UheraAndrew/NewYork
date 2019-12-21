@@ -1,4 +1,4 @@
-package newyork.webapp.config.tablescodes.assets;
+package newyork.webapp.config.assets;
 
 import static java.lang.String.format;
 import static newyork.common.StandardScrollingConfigs.standardStandaloneScrollingConfig;
@@ -7,9 +7,7 @@ import java.util.Optional;
 
 import com.google.inject.Injector;
 
-import newyork.tablescodes.assets.AssetClass;
-import newyork.tablescodes.assets.AssetType;
-import newyork.tablescodes.assets.producers.AssetTypeProducer;
+import newyork.assets.Asset;
 import newyork.common.LayoutComposer;
 import newyork.common.StandardActions;
 
@@ -22,27 +20,29 @@ import ua.com.fielden.platform.web.view.master.api.actions.MasterActions;
 import ua.com.fielden.platform.web.view.master.api.impl.SimpleMasterBuilder;
 import ua.com.fielden.platform.web.view.master.api.IMaster;
 import ua.com.fielden.platform.web.app.config.IWebUiBuilder;
-import newyork.main.menu.tablescodes.assets.MiAssetType;
+import newyork.main.menu.assets.MiAsset;
+import newyork.tablescodes.assets.AssetClass;
+import newyork.tablescodes.assets.AssetType;
 import ua.com.fielden.platform.web.centre.EntityCentre;
 import ua.com.fielden.platform.web.view.master.EntityMaster;
 import static ua.com.fielden.platform.web.PrefDim.mkDim;
 import ua.com.fielden.platform.web.PrefDim.Unit;
 /**
- * {@link AssetType} Web UI configuration.
+ * {@link Asset} Web UI configuration.
  *
  * @author Developers
  *
  */
-public class AssetTypeWebUiConfig {
+public class AssetWebUiConfig {
 
-    public final EntityCentre<AssetType> centre;
-    public final EntityMaster<AssetType> master;
+    public final EntityCentre<Asset> centre;
+    public final EntityMaster<Asset> master;
 
-    public static AssetTypeWebUiConfig register(final Injector injector, final IWebUiBuilder builder) {
-        return new AssetTypeWebUiConfig(injector, builder);
+    public static AssetWebUiConfig register(final Injector injector, final IWebUiBuilder builder) {
+        return new AssetWebUiConfig(injector, builder);
     }
 
-    private AssetTypeWebUiConfig(final Injector injector, final IWebUiBuilder builder) {
+    private AssetWebUiConfig(final Injector injector, final IWebUiBuilder builder) {
         centre = createCentre(injector, builder);
         builder.register(centre);
         master = createMaster(injector);
@@ -50,64 +50,63 @@ public class AssetTypeWebUiConfig {
     }
 
     /**
-     * Creates entity centre for {@link AssetType}.
+     * Creates entity centre for {@link Asset}.
      *
      * @param injector
      * @return created entity centre
      */
-    private EntityCentre<AssetType> createCentre(final Injector injector, final IWebUiBuilder builder) {
-        final String layout = LayoutComposer.mkVarGridForCentre(2, 2);
-
-        final EntityActionConfig standardNewAction = StandardActions.NEW_ACTION.mkAction(AssetType.class);
-        final EntityActionConfig standardDeleteAction = StandardActions.DELETE_ACTION.mkAction(AssetType.class);
-        final EntityActionConfig standardExportAction = StandardActions.EXPORT_ACTION.mkAction(AssetType.class);
-        final EntityActionConfig standardEditAction = StandardActions.EDIT_ACTION.mkAction(AssetType.class);
+    private EntityCentre<Asset> createCentre(final Injector injector, final IWebUiBuilder builder) {
+        final String layout = LayoutComposer.mkVarGridForCentre(1,2,1);
+        final EntityActionConfig standardNewAction = StandardActions.NEW_ACTION.mkAction(Asset.class);
+        final EntityActionConfig standardDeleteAction = StandardActions.DELETE_ACTION.mkAction(Asset.class);
+        final EntityActionConfig standardExportAction = StandardActions.EXPORT_ACTION.mkAction(Asset.class);
+        final EntityActionConfig standardEditAction = StandardActions.EDIT_ACTION.mkAction(Asset.class);
         final EntityActionConfig standardSortAction = CentreConfigActions.CUSTOMISE_COLUMNS_ACTION.mkAction();
-        builder.registerOpenMasterAction(AssetType.class, standardEditAction);
+        builder.registerOpenMasterAction(Asset.class, standardEditAction);
 
-        final EntityCentreConfig<AssetType> ecc = EntityCentreBuilder.centreFor(AssetType.class)
+        final EntityCentreConfig <Asset> ecc = EntityCentreBuilder.centreFor(Asset.class)
                 //.runAutomatically()
                 .addFrontAction(standardNewAction)
                 .addTopAction(standardNewAction).also()
                 .addTopAction(standardDeleteAction).also()
                 .addTopAction(standardSortAction).also()
                 .addTopAction(standardExportAction)
-                .addCrit("this").asMulti().autocompleter(AssetType.class).also()
+                .addCrit("this").asMulti().autocompleter(Asset.class).also()
+                .addCrit("assetType").asMulti().autocompleter(AssetType.class).also()
                 .addCrit("desc").asMulti().text().also()
-                .addCrit("assetClass").asMulti().autocompleter(AssetClass.class).also()
                 .addCrit("active").asMulti().bool()
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
                 .withScrollingConfig(standardStandaloneScrollingConfig(0))
                 .addProp("this").order(1).asc().minWidth(100)
-                    .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", AssetType.ENTITY_TITLE))
+                    .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", Asset.ENTITY_TITLE))
                     .withAction(standardEditAction).also()
                 .addProp("desc").minWidth(100).also()
-                .addProp("assetClass").width(100)
-                    .withActionSupplier(builder.getOpenMasterAction(AssetClass.class)).also()
-                .addProp("active").width(100)
-                //.addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
+                .addProp("assetType").width(100).withActionSupplier(builder.getOpenMasterAction(AssetType.class)).also()
+                .addProp("active").width(80)
+//                .addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
                 .addPrimaryAction(standardEditAction)
                 .build();
 
-        return new EntityCentre<>(MiAssetType.class, MiAssetType.class.getSimpleName(), ecc, injector, null);
+        return new EntityCentre<>(MiAsset.class, MiAsset.class.getSimpleName(), ecc, injector, null);
     }
 
     /**
-     * Creates entity master for {@link AssetType}.
+     * Creates entity master for {@link Asset}.
      *
      * @param injector
      * @return created entity master
      */
-    private EntityMaster<AssetType> createMaster(final Injector injector) {
+    private EntityMaster<Asset> createMaster(final Injector injector) {
         final String layout = LayoutComposer.mkGridForMasterFitWidth(4, 1);
 
-        final IMaster<AssetType> masterConfig = new SimpleMasterBuilder<AssetType>().forEntity(AssetType.class)
-                .addProp("name").asSinglelineText().also()
+        final IMaster<Asset> masterConfig = new SimpleMasterBuilder<Asset>().forEntity(Asset.class)
+                .addProp("number").asSinglelineText().also()
+                .addProp("assetType").asAutocompleter().also()
                 .addProp("desc").asMultilineText().also()
-                .addProp("assetClass").asAutocompleter().also()
                 .addProp("active").asCheckbox().also()
+                
                 .addAction(MasterActions.REFRESH).shortDesc("Cancel").longDesc("Cancel action")
                 .addAction(MasterActions.SAVE)
                 .setActionBarLayoutFor(Device.DESKTOP, Optional.empty(), LayoutComposer.mkActionLayoutForMaster())
@@ -117,6 +116,6 @@ public class AssetTypeWebUiConfig {
                 .withDimensions(mkDim(LayoutComposer.SIMPLE_ONE_COLUMN_MASTER_DIM_WIDTH, 480, Unit.PX))
                 .done();
 
-        return new EntityMaster<>(AssetType.class, AssetTypeProducer.class, masterConfig, injector);
+        return new EntityMaster<>(Asset.class, masterConfig, injector);
     }
 }

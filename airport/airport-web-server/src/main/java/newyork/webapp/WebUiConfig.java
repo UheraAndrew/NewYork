@@ -2,14 +2,15 @@ package newyork.webapp;
 
 import org.apache.commons.lang.StringUtils;
 
+import newyork.assets.Asset;
 import newyork.config.personnel.PersonWebUiConfig;
 import newyork.tablescodes.assets.AssetClass;
 import newyork.tablescodes.assets.AssetType;
 import newyork.tablescodes.assets.ConditionRating;
 import newyork.tablescodes.assets.ServiceStatus;
+import newyork.webapp.config.assets.AssetWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.AssetClassWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.ServiceStatusWebUiConfig;
-import newyork.tablescodes.assets.AssetType;
 import newyork.webapp.config.tablescodes.assets.AssetTypeWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.ConditionRatingWebUiConfig;
 import ua.com.fielden.platform.basic.config.Workflows;
@@ -84,6 +85,9 @@ public class WebUiConfig extends AbstractWebUiConfig {
         final ServiceStatusWebUiConfig serviceStatusWebUiConfig = ServiceStatusWebUiConfig.register(injector(), builder); 
         final ConditionRatingWebUiConfig conditionRatingWebUiConfig = ConditionRatingWebUiConfig.register(injector(), builder);
         
+        // Asset
+        final AssetWebUiConfig assetWebUiConfig = AssetWebUiConfig.register(injector(), builder);
+        
         // Configure application web resources such as masters and centres
         configApp()
         .addMaster(userWebUiConfig.master)
@@ -96,22 +100,23 @@ public class WebUiConfig extends AbstractWebUiConfig {
 
         // Configure application menu
         configDesktopMainMenu().
+            addModule("Asset Acquisition").
+                description("Asset acquisition module").
+                icon("mainMenu:equipment").
+                detailIcon("mainMenu:equipment").
+                bgColor("#FFE680").
+                captionBgColor("#FFD42A").menu()
+                .addMenuItem(Asset.ENTITY_TITLE).description(String.format("%s Centre", 
+                        Asset.ENTITY_TITLE)).centre(assetWebUiConfig.centre).done()
+                .done().done().
+                
             addModule("Users / Personnel").
                 description("Provides functionality for managing application security and personnel data.").
                 icon("mainMenu:help").
                 detailIcon("mainMenu:about").
                 bgColor("#FFE680").
                 captionBgColor("#FFD42A").menu()
-                .addMenuItem("Asset Table Codes").description("Various master data for assets.")
-                    .addMenuItem(AssetClass.ENTITY_TITLE).description(String.format("%s Centre", 
-                            AssetClass.ENTITY_TITLE)).centre(assetClassWebUiConfig.centre).done()
-                    .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", 
-                            AssetType.ENTITY_TITLE)).centre(assetTypeWebUiConfig.centre).done()
-                    .addMenuItem(ServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", 
-                    		    ServiceStatus.ENTITY_TITLE)).centre(serviceStatusWebUiConfig.centre).done()
-                    .addMenuItem(ConditionRating.ENTITY_TITLE).description(String.format("%s Centre", 
-                            ConditionRating.ENTITY_TITLE)).centre(conditionRatingWebUiConfig.centre).done()
-                .done()
+                
                 .addMenuItem("Personnel").description("Personnel related data")
                     .addMenuItem("Personnel").description("Personnel Centre").centre(personWebUiConfig.centre).done()
                 .done()
@@ -120,11 +125,29 @@ public class WebUiConfig extends AbstractWebUiConfig {
                     .addMenuItem("Users").description("User centre").centre(userWebUiConfig.centre).done()
                     .addMenuItem("User Roles").description("User roles centre").centre(userRoleWebUiConfig.centre).done()
                 .done()
-            .done().done()
-        .setLayoutFor(Device.DESKTOP, null, "[[[]]]")
-        .setLayoutFor(Device.TABLET, null, "[[[]]]")
-        .setLayoutFor(Device.MOBILE, null, "[[[]]]")
+            .done().done().
+            
+            addModule("Table Codes").
+                description("Table Codes Description").
+                icon("mainMenu:tablecodes").
+                detailIcon("mainMenu:tablecodes").
+                bgColor("#FFE680").
+                captionBgColor("#FFD42A").menu()
+            .addMenuItem("Asset Table Codes").description("Various master data for assets.")
+                .addMenuItem(AssetClass.ENTITY_TITLE).description(String.format("%s Centre", AssetClass.ENTITY_TITLE))
+                .centre(assetClassWebUiConfig.centre).done()
+                .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", AssetType.ENTITY_TITLE))
+                .centre(assetTypeWebUiConfig.centre).done()
+                .addMenuItem(ServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", 
+                        ServiceStatus.ENTITY_TITLE)).centre(serviceStatusWebUiConfig.centre).done()
+                .addMenuItem(ConditionRating.ENTITY_TITLE).description(String.format("%s Centre", 
+                    ConditionRating.ENTITY_TITLE)).centre(conditionRatingWebUiConfig.centre).done()
+            .done().
+            done().done()
+        .setLayoutFor(Device.DESKTOP, null, "[[[{\"rowspan\":2}], []], [[]]]")
+        .setLayoutFor(Device.TABLET, null,  "[[[{\"rowspan\":2}], []], [[]]]")
+        .setLayoutFor(Device.MOBILE, null, "[[[]],[[]], [[]]]")
         .minCellWidth(100).minCellHeight(148).done();
-    }
+        }
 
 }
