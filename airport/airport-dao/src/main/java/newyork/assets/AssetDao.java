@@ -21,9 +21,10 @@ import ua.com.fielden.platform.keygen.KeyNumber;
  */
 @EntityType(Asset.class)
 public class AssetDao extends CommonEntityDao<Asset> implements IAsset {
-    public static final String DEFAULT_ASSET_NUMBER = "NEXT NUMBER WILL BE GENERATED UPON SAVE";
     public static final String ERR_FAILED_SAVE = "Deliberate save exception.";
 
+    private boolean throwExceptionForTestingPurposes = false;
+    
     @Inject
     public AssetDao(final IFilter filter) {
         super(filter);
@@ -32,34 +33,48 @@ public class AssetDao extends CommonEntityDao<Asset> implements IAsset {
     @Override
     @SessionRequired
     public Asset save(final Asset asset) {
-        // TODO: implement a solution for a failed transaction where ID was already assigned 
-        // what if in this place we have an exception?
-        // like the asset with number 3 is already created but your number 3 is already assigned
-        // conflict!
-        // would you check if your asset is persisted but also if you value is not the default one?
-        // to revert the number assigned
-        if (!asset.isPersisted()) {
-            final IKeyNumber coKeyNumber = co(KeyNumber.class);
-            final Integer nextNumber = coKeyNumber.nextNumber("ASSET_NUMBER");
-            asset.setNumber(nextNumber.toString());
+    	final boolean wasPersisted = asset.isPersisted();
+        try {
+            if (!wasPersisted) {
+                final IKeyNumber coKeyNumber = co(KeyNumber.class);
+                final Integer nextNumber = coKeyNumber.nextNumber("ASSET_NUMBER");
+                asset.setNumber(nextNumber.toString());
+            }
+
+            if (throwExceptionForTestingPurposes) {
+                throw Result.failure(ERR_FAILED_SAVE);
+            }
+
+            final Asset savedAsset = super.save(asset);
+
+            
+
+            return savedAsset;
+        } catch (final Exception ex) {
+            if (!wasPersisted) {
+                asset.setNumber(DEFAULT_ASSET_NUMBER);
+            }
+            throw ex;
         }
-        // TODO: length of six, to have not numbers but strings in form like 000001 or 000101
-        return super.save(asset);
     }
-    
+
     @SessionRequired
-    public Asset saveWithError(final Asset asset) {
-        save(asset);
-        throw Result.failure(ERR_FAILED_SAVE); 
-    }
+	public void saveWithError(final Asset asset) {
+    	throwExceptionForTestingPurposes = true;
+    	try {
+    		save(asset);
+    	} finally {
+    		throwExceptionForTestingPurposes = false;
+    	}
+		
+	}
     
     @Override
     public Asset new_() {
-        final Asset asset = super.new_();
-        asset.setNumber(DEFAULT_ASSET_NUMBER);
-        
-        return asset;
+    	final Asset asset = super.new_();
+    	return asset;   	
     }
+
 
     @Override
     @SessionRequired
@@ -77,4 +92,5 @@ public class AssetDao extends CommonEntityDao<Asset> implements IAsset {
     protected IFetchProvider<Asset> createFetchProvider() {
         return FETCH_PROVIDER;
         }
+
 }

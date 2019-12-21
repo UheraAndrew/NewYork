@@ -14,4 +14,7 @@ public interface IAsset extends IEntityDao<Asset> {
 
     static final IFetchProvider<Asset> FETCH_PROVIDER = EntityUtils.fetch(Asset.class)
             .with("number", "desc");
+    
+    String DEFAULT_ASSET_NUMBER = "NEXT NUMBER WILL BE GENERATED UPON SAVE";
+    
 }
