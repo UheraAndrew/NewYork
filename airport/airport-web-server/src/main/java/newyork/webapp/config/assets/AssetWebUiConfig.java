@@ -21,6 +21,8 @@ import ua.com.fielden.platform.web.view.master.api.impl.SimpleMasterBuilder;
 import ua.com.fielden.platform.web.view.master.api.IMaster;
 import ua.com.fielden.platform.web.app.config.IWebUiBuilder;
 import newyork.main.menu.assets.MiAsset;
+import newyork.tablescodes.assets.AssetClass;
+import newyork.tablescodes.assets.AssetType;
 import ua.com.fielden.platform.web.centre.EntityCentre;
 import ua.com.fielden.platform.web.view.master.EntityMaster;
 import static ua.com.fielden.platform.web.PrefDim.mkDim;
@@ -72,7 +74,8 @@ public class AssetWebUiConfig {
                 .addTopAction(standardExportAction)
                 .addCrit("this").asMulti().autocompleter(Asset.class).also()
                 .addCrit("desc").asMulti().text().also()
-                .addCrit("active").asMulti().bool()
+                .addCrit("active").asMulti().bool().also()
+                .addCrit("assetType").asMulti().autocompleter(AssetType.class)
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
@@ -81,8 +84,9 @@ public class AssetWebUiConfig {
                     .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", Asset.ENTITY_TITLE))
                     .withAction(standardEditAction).also()
                 .addProp("desc").minWidth(100).also()
+                .addProp("assetType").width(100).withActionSupplier(builder.getOpenMasterAction(AssetType.class)).also()
                 .addProp("active").width(80)
-                //.addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
+//                .addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
                 .addPrimaryAction(standardEditAction)
                 .build();
 
@@ -96,12 +100,13 @@ public class AssetWebUiConfig {
      * @return created entity master
      */
     private EntityMaster<Asset> createMaster(final Injector injector) {
-        final String layout = LayoutComposer.mkGridForMasterFitWidth(3, 1);
+        final String layout = LayoutComposer.mkGridForMasterFitWidth(4, 1);
 
         final IMaster<Asset> masterConfig = new SimpleMasterBuilder<Asset>().forEntity(Asset.class)
                 .addProp("number").asSinglelineText().also()
                 .addProp("desc").asMultilineText().also()
                 .addProp("active").asCheckbox().also()
+                .addProp("assetType").asAutocompleter().also()
                 .addAction(MasterActions.REFRESH).shortDesc("Cancel").longDesc("Cancel action")
                 .addAction(MasterActions.SAVE)
                 .setActionBarLayoutFor(Device.DESKTOP, Optional.empty(), LayoutComposer.mkActionLayoutForMaster())

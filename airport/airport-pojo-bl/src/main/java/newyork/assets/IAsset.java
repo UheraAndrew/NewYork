@@ -13,7 +13,7 @@ import ua.com.fielden.platform.dao.IEntityDao;
 public interface IAsset extends IEntityDao<Asset> {
 
     static final IFetchProvider<Asset> FETCH_PROVIDER = EntityUtils.fetch(Asset.class)
-            .with("number", "desc");
+            .with("number", "desc", "assetType");
     
     String DEFAULT_ASSET_NUMBER = "NEXT NUMBER WILL BE GENERATED UPON SAVE";
     
