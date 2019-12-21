@@ -108,10 +108,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 captionBgColor("#FFD42A").menu()
                 .addMenuItem(Asset.ENTITY_TITLE).description(String.format("%s Centre", 
                         Asset.ENTITY_TITLE)).centre(assetWebUiConfig.centre).done()
-                .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", 
-                        AssetType.ENTITY_TITLE)).centre(assetTypeWebUiConfig.centre).
-                done()
-            .done().done().
+                .done().done().
                 
             addModule("Users / Personnel").
                 description("Provides functionality for managing application security and personnel data.").
