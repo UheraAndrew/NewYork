@@ -6,16 +6,16 @@ import newyork.assets.Asset;
 import newyork.organisational.BusinessUnit;
 import newyork.organisational.Organisation;
 import newyork.organisational.Role;
-import newyork.tablescodes.assets.definers.AssetOwnershipExclusivityDefiner;
-import newyork.tablescodes.validators.AssetOwnershipEndTimeValiator;
+import newyork.tablescodes.assets.definers.AssetManagementExclusivityDefiner;
+import newyork.tablescodes.validators.AssetManagementEndTimeValiator;
 import ua.com.fielden.platform.entity.AbstractPersistentEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
+import ua.com.fielden.platform.entity.annotation.KeyType;
+import ua.com.fielden.platform.entity.annotation.KeyTitle;
 import ua.com.fielden.platform.entity.annotation.CompanionObject;
 import ua.com.fielden.platform.entity.annotation.CompositeKeyMember;
 import ua.com.fielden.platform.entity.annotation.DateOnly;
 import ua.com.fielden.platform.entity.annotation.IsProperty;
-import ua.com.fielden.platform.entity.annotation.KeyTitle;
-import ua.com.fielden.platform.entity.annotation.KeyType;
 import ua.com.fielden.platform.entity.annotation.MapEntityTo;
 import ua.com.fielden.platform.entity.annotation.MapTo;
 import ua.com.fielden.platform.entity.annotation.Observable;
@@ -34,57 +34,58 @@ import ua.com.fielden.platform.utils.Pair;
  */
 @KeyType(DynamicEntityKey.class)
 @KeyTitle("Key")
-@CompanionObject(IAssetOwnership.class)
+@CompanionObject(IAssetManagement.class)
 @MapEntityTo
-public class AssetOwnership extends AbstractPersistentEntity<DynamicEntityKey> {
+public class AssetManagement extends AbstractPersistentEntity<DynamicEntityKey> {
 
-    private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(AssetOwnership.class);
+    private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(AssetManagement.class);
     public static final String ENTITY_TITLE = entityTitleAndDesc.getKey();
     public static final String ENTITY_DESC = entityTitleAndDesc.getValue();
 
     @IsProperty
     @MapTo
-    @Title(value = "Asset", desc = "Asset Ownership")
+    @Title(value = "Asset", desc = "Asset Management")
     @CompositeKeyMember(1)
     private Asset asset;
 
     @IsProperty
     @MapTo
-    @Title(value = "Start Date", desc = "The start date of the ownership")
+    @Title(value = "Start Date", desc = "The start date of the management")
     @CompositeKeyMember(2)
     @DateOnly
     private Date startDate;
 
     @IsProperty
     @MapTo
-    @Title(value = "End Date ", desc = "The end date of the ownership")
+    @Title(value = "End Date ", desc = "The end date of the management")
     @CompositeKeyMember(3)
     @DateOnly
     @BeforeChange({
-            @Handler(AssetOwnershipEndTimeValiator.class)
+            @Handler(AssetManagementEndTimeValiator.class)
     })
+    //TODO: ERROR WALIDATOR
     private Date endDate;
 
     @IsProperty
     @MapTo
-    @Title(value = "Role", desc = "Role that owns assets of the specified asset type")
-    @AfterChange(AssetOwnershipExclusivityDefiner.class)
+    @Title(value = "Role", desc = "Role that manage assets of the specified asset type")
+    @AfterChange(AssetManagementExclusivityDefiner.class)
     private Role role;
 
     @IsProperty
     @MapTo
-    @Title(value = "Business Unit", desc = "Business unit that owns assets of the specified asset type")
-    @AfterChange(AssetOwnershipExclusivityDefiner.class)
+    @Title(value = "Business Unit", desc = "Business unit that manage assets of the specified asset type")
+    @AfterChange(AssetManagementExclusivityDefiner.class)
     private BusinessUnit bu;
 
     @IsProperty
     @MapTo
-    @Title(value = "Organisation", desc = "Organisation that owns assets of the specified asset type")
-    @AfterChange(AssetOwnershipExclusivityDefiner.class)
+    @Title(value = "Organisation", desc = "Organisation that manage assets of the specified asset type")
+    @AfterChange(AssetManagementExclusivityDefiner.class)
     private Organisation org;
 
     @Observable
-    public AssetOwnership setAsset(final Asset asset) {
+    public AssetManagement setAsset(final Asset asset) {
         this.asset = asset;
         return this;
     }
@@ -94,7 +95,7 @@ public class AssetOwnership extends AbstractPersistentEntity<DynamicEntityKey> {
     }
 
     @Observable
-    public AssetOwnership setStartDate(final Date startDate) {
+    public AssetManagement setStartDate(final Date startDate) {
         this.startDate = startDate;
         return this;
     }
@@ -104,7 +105,7 @@ public class AssetOwnership extends AbstractPersistentEntity<DynamicEntityKey> {
     }
 
     @Observable
-    public AssetOwnership setEndDate(final Date endDate) {
+    public AssetManagement setEndDate(final Date endDate) {
         this.endDate = endDate;
         return this;
     }
@@ -114,7 +115,7 @@ public class AssetOwnership extends AbstractPersistentEntity<DynamicEntityKey> {
     }
 
     @Observable
-    public AssetOwnership setOrg(final Organisation org) {
+    public AssetManagement setOrg(final Organisation org) {
         this.org = org;
         return this;
     }
@@ -124,7 +125,7 @@ public class AssetOwnership extends AbstractPersistentEntity<DynamicEntityKey> {
     }
 
     @Observable
-    public AssetOwnership setBu(final BusinessUnit bu) {
+    public AssetManagement setBu(final BusinessUnit bu) {
         this.bu = bu;
         return this;
     }
@@ -134,7 +135,7 @@ public class AssetOwnership extends AbstractPersistentEntity<DynamicEntityKey> {
     }
 
     @Observable
-    public AssetOwnership setRole(final Role role) {
+    public AssetManagement setRole(final Role role) {
         this.role = role;
         return this;
     }
@@ -142,5 +143,4 @@ public class AssetOwnership extends AbstractPersistentEntity<DynamicEntityKey> {
     public Role getRole() {
         return role;
     }
-
 }
