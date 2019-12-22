@@ -11,8 +11,10 @@ import ua.com.fielden.platform.basic.config.IApplicationDomainProvider;
 import ua.com.fielden.platform.domain.PlatformDomainTypes;
 import ua.com.fielden.platform.entity.AbstractEntity;
 import newyork.tablescodes.assets.AssetClass;
+import newyork.tablescodes.assets.AssetOperation;
 import newyork.tablescodes.assets.ServiceStatus;
 import newyork.tablescodes.assets.AssetType;
+import newyork.tablescodes.assets.AssetTypeOperation;
 import newyork.tablescodes.assets.ConditionRating;
 import newyork.assets.Asset;
 import newyork.tablescodes.assets.ui_actions.OpenAssetClassMasterAction;
@@ -62,6 +64,8 @@ public class ApplicationDomain implements IApplicationDomainProvider {
         add(Organisation.class);
         add(AssetTypeOwnership.class);
         add(AssetOwnership.class);
+        add(AssetOperation.class);
+        add(AssetTypeOperation.class);
     }
 
     @Override
