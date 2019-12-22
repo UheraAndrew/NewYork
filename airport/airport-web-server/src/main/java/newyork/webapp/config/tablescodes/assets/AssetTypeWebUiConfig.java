@@ -56,7 +56,7 @@ public class AssetTypeWebUiConfig {
      * @return created entity centre
      */
     private EntityCentre<AssetType> createCentre(final Injector injector, final IWebUiBuilder builder) {
-        final String layout = LayoutComposer.mkGridForCentre(2, 2);
+        final String layout = LayoutComposer.mkVarGridForCentre(2, 2);
 
         final EntityActionConfig standardNewAction = StandardActions.NEW_ACTION.mkAction(AssetType.class);
         final EntityActionConfig standardDeleteAction = StandardActions.DELETE_ACTION.mkAction(AssetType.class);
@@ -84,7 +84,8 @@ public class AssetTypeWebUiConfig {
                     .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", AssetType.ENTITY_TITLE))
                     .withAction(standardEditAction).also()
                 .addProp("desc").minWidth(100).also()
-                .addProp("assetClass").width(100).withActionSupplier(builder.getOpenMasterAction(AssetClass.class)).also()
+                .addProp("assetClass").width(100)
+                    .withActionSupplier(builder.getOpenMasterAction(AssetClass.class)).also()
                 .addProp("active").width(100)
                 //.addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
                 .addPrimaryAction(standardEditAction)

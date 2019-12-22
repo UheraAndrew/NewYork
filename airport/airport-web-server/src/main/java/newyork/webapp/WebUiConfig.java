@@ -128,8 +128,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 .addMenuItem(Asset.ENTITY_TITLE).description(String.format("%s Centre", Asset.ENTITY_TITLE)).centre(assetWebUiConfig.centre).done()
                 .addMenuItem(AssetFinDet.ENTITY_TITLE).description(String.format("%s Centre", AssetFinDet.ENTITY_TITLE)).centre(assetFinDetWebUiConfig.centre).done()
                 .addMenuItem(Project.ENTITY_TITLE).description(String.format("%s Centre", Project.ENTITY_TITLE)).centre(projectWebUiConfig.centre).done()
-            .done().done().
-                
+            .done().done().              
             addModule("Users / Personnel").
                 description("Provides functionality for managing application security and personnel data.").
                 icon("mainMenu:help").

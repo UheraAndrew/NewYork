@@ -1,5 +1,7 @@
 package newyork.assets;
 
+import static newyork.assets.IAsset.DEFAULT_ASSET_NUMBER;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -86,7 +88,7 @@ public class AssetTest extends AbstractDaoTestCase {
         }
         
         assertFalse(asset.isPersisted()); 
-        assertEquals("1", asset.getNumber());
+        assertEquals(DEFAULT_ASSET_NUMBER, asset.getNumber());
         
         final Asset savedAsset = co$.save(asset);
         assertTrue(savedAsset.isPersisted());
@@ -109,7 +111,7 @@ public class AssetTest extends AbstractDaoTestCase {
         
         assertFalse(assetByUser1.isPersisted()); 
         assertFalse(co$.entityExists(assetByUser1));
-        assertEquals("1", assetByUser1.getNumber());
+        assertEquals(DEFAULT_ASSET_NUMBER, assetByUser1.getNumber());
         
         // another user saved some asset concurrently
         final Asset assetSavedByUser2 = co$.save(co$.new_().setDesc("another new desc"));
