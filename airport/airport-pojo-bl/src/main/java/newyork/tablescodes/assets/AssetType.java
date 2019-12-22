@@ -1,6 +1,5 @@
 package newyork.tablescodes.assets;
 
-import ua.com.fielden.platform.entity.AbstractEntity;
 import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.KeyType;
@@ -59,7 +58,7 @@ public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
     public AssetType setDesc(String desc) {
         super.setDesc(desc);
         return this;
-        }
+    }
  
     @IsProperty
     @MapTo

@@ -3,7 +3,6 @@ package newyork.projects;
 import java.util.Date;
 
 import newyork.projects.validators.ProjectStartAndFinishDatesValidator;
-import ua.com.fielden.platform.entity.AbstractEntity;
 import ua.com.fielden.platform.entity.AbstractPersistentEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.KeyType;
@@ -41,7 +40,7 @@ import ua.com.fielden.platform.utils.Pair;
 @DescTitle("Description")
 @DisplayDescription
 @DescRequired
-public class Project extends AbstractPersistentEntity<DynamicEntityKey> {
+public class Project extends AbstractPersistentEntity<DynamicEntityKey>{
 
     private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(Project.class);
     public static final String ENTITY_TITLE = entityTitleAndDesc.getKey();
@@ -105,12 +104,8 @@ public class Project extends AbstractPersistentEntity<DynamicEntityKey> {
     @Override
     @Observable
     public Project setDesc(String desc) {
-        // TODO Auto-generated method stub
         super.setDesc(desc);
         return this;
     }
-
-    
-
     
 }

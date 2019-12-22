@@ -2,11 +2,12 @@ package newyork.tablescodes.assets;
 
 import java.util.Date;
 
+import newyork.assets.Asset;
 import newyork.organisational.BusinessUnit;
 import newyork.organisational.Organisation;
 import newyork.organisational.Role;
-import newyork.tablescodes.assets.definers.AssetTypeOwnershipExclusivityDefiner;
-import newyork.tablescodes.validators.AssetTypeOwnershipEndTimeValiator;
+import newyork.tablescodes.assets.definers.AssetOwnershipExclusivityDefiner;
+import newyork.tablescodes.validators.AssetOwnershipEndTimeValiator;
 import ua.com.fielden.platform.entity.AbstractPersistentEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.CompanionObject;
@@ -33,19 +34,19 @@ import ua.com.fielden.platform.utils.Pair;
  */
 @KeyType(DynamicEntityKey.class)
 @KeyTitle("Key")
-@CompanionObject(IAssetTypeOwnership.class)
+@CompanionObject(IAssetOwnership.class)
 @MapEntityTo
-public class AssetTypeOwnership extends AbstractPersistentEntity<DynamicEntityKey> {
+public class AssetOwnership extends AbstractPersistentEntity<DynamicEntityKey> {
 
-    private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(AssetTypeOwnership.class);
+    private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(AssetOwnership.class);
     public static final String ENTITY_TITLE = entityTitleAndDesc.getKey();
     public static final String ENTITY_DESC = entityTitleAndDesc.getValue();
-
+    
     @IsProperty
     @MapTo
-    @Title(value = "Asset Type", desc = "Asset type ownership")
+    @Title(value = "Asset", desc = "Asset Ownership")
     @CompositeKeyMember(1)
-    private AssetType assetType;
+    private Asset asset;
 
     @IsProperty
     @MapTo
@@ -53,49 +54,58 @@ public class AssetTypeOwnership extends AbstractPersistentEntity<DynamicEntityKe
     @CompositeKeyMember(2)
     @DateOnly
     private Date startDate;
-    // TODO: if introducing finishDate: ensure there will be no overlaps or gaps in the ownership
-    // else (leaving only startDate): ensure there would be appropriate next ownership and new startDate will be after this startDate 
     
     @IsProperty
     @MapTo
-    @Title(value = "End Date", desc = "The end date of the ownership")
+    @Title(value = "End Date ", desc = "The end date of the ownership")
     @CompositeKeyMember(3)
     @DateOnly
     @BeforeChange({
-        @Handler(AssetTypeOwnershipEndTimeValiator.class)
+        @Handler(AssetOwnershipEndTimeValiator.class)
     })
     private Date endDate;
 
     @IsProperty
     @MapTo
     @Title(value = "Role", desc = "Role that owns assets of the specified asset type")
-    @AfterChange(AssetTypeOwnershipExclusivityDefiner.class)
+    @AfterChange(AssetOwnershipExclusivityDefiner.class)
     private Role role;
 
     @IsProperty
     @MapTo
     @Title(value = "Business Unit", desc = "Business unit that owns assets of the specified asset type")
-    @AfterChange(AssetTypeOwnershipExclusivityDefiner.class)
+    @AfterChange(AssetOwnershipExclusivityDefiner.class)
     private BusinessUnit bu;
     
     @IsProperty
     @MapTo
     @Title(value = "Organisation", desc = "Organisation that owns assets of the specified asset type")
-    @AfterChange(AssetTypeOwnershipExclusivityDefiner.class)
+    @AfterChange(AssetOwnershipExclusivityDefiner.class)
     private Organisation org;
-
+    
+       
     @Observable
-    public AssetTypeOwnership setStartDate(final Date startDate) {
-        this.startDate = startDate;
+    public AssetOwnership setAsset(final Asset asset) {
+        this.asset = asset;
         return this;
     }
 
+    public Asset getAsset() {
+        return asset;
+    }
+     
+    @Observable
+    public AssetOwnership setStartDate(final Date startDate) {
+        this.startDate = startDate;
+        return this;
+    }
+    
     public Date getStartDate() {
         return startDate;
     }
     
     @Observable
-    public AssetTypeOwnership setEndDate(final Date endDate) {
+    public AssetOwnership setEndDate(final Date endDate) {
         this.endDate = endDate;
         return this;
     }
@@ -103,10 +113,9 @@ public class AssetTypeOwnership extends AbstractPersistentEntity<DynamicEntityKe
     public Date getEndDate() {
         return endDate;
     }
-
  
     @Observable
-    public AssetTypeOwnership setOrg(final Organisation org) {
+    public AssetOwnership setOrg(final Organisation org) {
         this.org = org;
         return this;
     }
@@ -116,7 +125,7 @@ public class AssetTypeOwnership extends AbstractPersistentEntity<DynamicEntityKe
     }
 
     @Observable
-    public AssetTypeOwnership setBu(final BusinessUnit bu) {
+    public AssetOwnership setBu(final BusinessUnit bu) {
         this.bu = bu;
         return this;
     }
@@ -126,7 +135,7 @@ public class AssetTypeOwnership extends AbstractPersistentEntity<DynamicEntityKe
     }
 
     @Observable
-    public AssetTypeOwnership setRole(final Role role) {
+    public AssetOwnership setRole(final Role role) {
         this.role = role;
         return this;
     }
@@ -134,15 +143,5 @@ public class AssetTypeOwnership extends AbstractPersistentEntity<DynamicEntityKe
     public Role getRole() {
         return role;
     }
-  
-    @Observable
-    public AssetTypeOwnership setAssetType(final AssetType assetType) {
-        this.assetType = assetType;
-        return this;
-    }
-
-    public AssetType getAssetType() {
-        return assetType;
-    }
-
+    
 }
