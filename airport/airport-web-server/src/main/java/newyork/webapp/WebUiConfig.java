@@ -7,10 +7,14 @@ import newyork.assets.AssetFinDet;
 import newyork.config.personnel.PersonWebUiConfig;
 import newyork.projects.Project;
 import newyork.tablescodes.assets.AssetClass;
-import newyork.tablescodes.assets.AssetOperation;
-import newyork.tablescodes.assets.AssetOwnership;
+
 import newyork.tablescodes.assets.AssetType;
+import newyork.tablescodes.assets.AssetManagement;
+import newyork.tablescodes.assets.AssetTypeManagement;
+import newyork.tablescodes.assets.AssetOwnership;
 import newyork.tablescodes.assets.AssetTypeOperation;
+import newyork.tablescodes.assets.AssetOperation;
+
 import newyork.tablescodes.assets.AssetTypeOwnership;
 import newyork.tablescodes.assets.ConditionRating;
 import newyork.tablescodes.assets.ServiceStatus;
@@ -20,10 +24,14 @@ import newyork.webapp.config.personel.BusinessUnitWebUiConfig;
 import newyork.webapp.config.personel.OrganisationWebUiConfig;
 import newyork.webapp.config.personel.RoleWebUiConfig;
 import newyork.webapp.config.projects.ProjectWebUiConfig;
+
 import newyork.webapp.config.tablescodes.assets.AssetClassWebUiConfig;
+import newyork.webapp.config.tablescodes.assets.AssetManagementWebUiConfig;
+import newyork.webapp.config.tablescodes.assets.AssetTypeManagementWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.AssetOperationWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.AssetOwnershipWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.AssetTypeOperationWebUiConfig;
+
 import newyork.webapp.config.tablescodes.assets.AssetTypeOwnershipWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.AssetTypeWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.ConditionRatingWebUiConfig;
@@ -106,9 +114,14 @@ public class WebUiConfig extends AbstractWebUiConfig {
         final ConditionRatingWebUiConfig conditionRatingWebUiConfig = ConditionRatingWebUiConfig.register(injector(), builder);
         final AssetTypeOwnershipWebUiConfig assetTypeOwnershipWebUiConfig = AssetTypeOwnershipWebUiConfig.register(injector(), builder);
         final AssetOwnershipWebUiConfig assetOwnershipWebUiConfig = AssetOwnershipWebUiConfig.register(injector(), builder);
+
+        final AssetTypeManagementWebUiConfig assetTypeManagementWebUiConfig = AssetTypeManagementWebUiConfig.register(injector(), builder);
+        final AssetManagementWebUiConfig assetManagementWebUiConfig = AssetManagementWebUiConfig.register(injector(), builder);
+
         final AssetTypeOperationWebUiConfig assetTypeOperationWebUiConfig = AssetTypeOperationWebUiConfig.register(injector(), builder);
         final AssetOperationWebUiConfig assetOperationWebUiConfig = AssetOperationWebUiConfig.register(injector(), builder);
-        // Asset
+
+      // Asset
         final AssetWebUiConfig assetWebUiConfig = AssetWebUiConfig.register(injector(), builder);
         final AssetFinDetWebUiConfig assetFinDetWebUiConfig = AssetFinDetWebUiConfig.register(injector(), builder);
         
@@ -167,6 +180,10 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 .addMenuItem(ConditionRating.ENTITY_TITLE).description(String.format("%s Centre", ConditionRating.ENTITY_TITLE)).centre(conditionRatingWebUiConfig.centre).done()
                 .addMenuItem(AssetTypeOwnership.ENTITY_TITLE).description(String.format("%s Centre", AssetTypeOwnership.ENTITY_TITLE)).centre(assetTypeOwnershipWebUiConfig.centre).done()
                 .addMenuItem(AssetOwnership.ENTITY_TITLE).description(String.format("%s Centre", AssetOwnership.ENTITY_TITLE)).centre(assetOwnershipWebUiConfig.centre).done()
+
+                .addMenuItem(AssetTypeManagement.ENTITY_TITLE).description(String.format("%s Centre", AssetTypeManagement.ENTITY_TITLE)).centre(assetTypeManagementWebUiConfig.centre).done()
+                .addMenuItem(AssetManagement.ENTITY_TITLE).description(String.format("%s Centre", AssetManagement.ENTITY_TITLE)).centre(assetManagementWebUiConfig.centre).done()
+
                 .addMenuItem(AssetTypeOperation.ENTITY_TITLE).description(String.format("%s Centre", AssetTypeOperation.ENTITY_TITLE)).centre(assetTypeOperationWebUiConfig.centre).done()
                 .addMenuItem(AssetOperation.ENTITY_TITLE).description(String.format("%s Centre", AssetOperation.ENTITY_TITLE)).centre(assetOperationWebUiConfig.centre).done()
                 
