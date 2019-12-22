@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 
 import newyork.tablescodes.assets.AssetClass;
+import newyork.tablescodes.assets.AssetType;
 import newyork.tablescodes.assets.IAssetClass;
 import newyork.tablescodes.validators.NoSpacesValidator;
 import newyork.test_config.AbstractDaoTestCase;

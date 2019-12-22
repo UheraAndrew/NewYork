@@ -59,6 +59,13 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     @Title(value = "Fin Det", desc = "Financial details for this asset")
     private AssetFinDet finDet;
 
+
+    @IsProperty
+    @MapTo
+    @Title(value = "Asset Type", desc = "A type of asset")
+    @Required
+    private AssetType assetType;
+    
     @Observable
     protected Asset setFinDet(final AssetFinDet finDet) {
         this.finDet = finDet;
@@ -85,12 +92,6 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
         super.setDesc(desc);
         return this;
     } 
-    
-    @IsProperty
-    @MapTo
-    @Title(value = "Asset Type", desc = "A type of asset")
-    @Required
-    private AssetType assetType;
     
     @Observable
     public Asset setAssetType(final AssetType assetType) {

@@ -18,6 +18,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import newyork.tablescodes.assets.AssetClass;
+import newyork.tablescodes.assets.AssetType;
+import newyork.tablescodes.assets.IAssetType;
 import newyork.test_config.AbstractDaoTestCase;
 import newyork.test_config.UniversalConstantsForTesting;
 import ua.com.fielden.platform.dao.QueryExecutionModel;
@@ -39,8 +41,11 @@ public class AssetTest extends AbstractDaoTestCase {
 
     @Test
     public void newly_saved_asset_has_number_generated() {
+        final AssetClass ac1 = save(new_(AssetClass.class).setName("AC1").setDesc("asset class 1").setActive(true));
+        final AssetType at1 = save(new_(AssetType.class).setName("AT1").setDesc("asset type 1").setAssetClass(ac1).setActive(true));
+        
         final IAsset co$ = co$(Asset.class);
-        final Asset asset = co$.new_().setDesc("some description");
+        final Asset asset = co$.new_().setDesc("some description").setAssetType(at1);
         
         final Asset savedAsset = co$.save(asset);
         
@@ -49,11 +54,13 @@ public class AssetTest extends AbstractDaoTestCase {
     }
     
     @Test
-    @Ignore
     // TODO: fix AssetDao save method
     public void existing_assets_keep_their_original_numbers() {
+        final AssetClass ac1 = save(new_(AssetClass.class).setName("AC1").setDesc("asset class 1").setActive(true));
+        final AssetType at1 = save(new_(AssetType.class).setName("AT1").setDesc("asset type 1").setAssetClass(ac1).setActive(true));
+
         final IAsset co$ = co$(Asset.class);
-        final Asset asset = co$.new_().setDesc("some description");
+        final Asset asset = co$.new_().setDesc("some description").setAssetType(at1);
         
         final Asset savedAsset = co$.save(asset).setDesc("another description");
         assertTrue(savedAsset.isDirty());
@@ -65,9 +72,12 @@ public class AssetTest extends AbstractDaoTestCase {
     
     @Test
     public void sequentially_created_assets_have_sequential_numbers() {
+        final AssetClass ac1 = save(new_(AssetClass.class).setName("AC1").setDesc("asset class 1").setActive(true));
+        final AssetType at1 = save(new_(AssetType.class).setName("AT1").setDesc("asset type 1").setAssetClass(ac1).setActive(true));
+        
         final IAsset co$ = co$(Asset.class);
-        final Asset asset1 = co$.save(co$.new_().setDesc("asset 1 description"));
-        final Asset asset2 = co$.save(co$.new_().setDesc("asset 2 description"));
+        final Asset asset1 = co$.save(co$.new_().setDesc("asset 1 description").setAssetType(at1));
+        final Asset asset2 = co$.save(co$.new_().setDesc("asset 2 description").setAssetType(at1));
         
         assertEquals("1", asset1.getNumber());
         assertEquals("2", asset2.getNumber());
@@ -76,8 +86,11 @@ public class AssetTest extends AbstractDaoTestCase {
     
     @Test
     public void new_asset_can_be_saved_after_the_first_failed_attempt() {
+        final AssetClass ac1 = save(new_(AssetClass.class).setName("AC1").setDesc("asset class 1").setActive(true));
+        final AssetType at1 = save(new_(AssetType.class).setName("AT1").setDesc("asset type 1").setAssetClass(ac1).setActive(true));
+        
         final AssetDao co$ = co$(Asset.class);
-        final Asset asset = co$.new_().setDesc("new desc");
+        final Asset asset = co$.new_().setDesc("new desc").setAssetType(at1);
         
         // the first attempt to save an asset should fail
         try {
@@ -98,8 +111,11 @@ public class AssetTest extends AbstractDaoTestCase {
     
     @Test
     public void concurrent_saving_of_assets_is_supported_even_with_repeated_saving_after_failures() {
+        final AssetClass ac1 = save(new_(AssetClass.class).setName("AC1").setDesc("asset class 1").setActive(true));
+        final AssetType at1 = save(new_(AssetType.class).setName("AT1").setDesc("asset type 1").setAssetClass(ac1).setActive(true));
+
         final AssetDao co$ = co$(Asset.class);
-        final Asset assetByUser1 = co$.new_().setDesc("new desc");
+        final Asset assetByUser1 = co$.new_().setDesc("new desc").setAssetType(at1);
         
         // the first attempt to save an asset should fail
         try {
@@ -114,7 +130,7 @@ public class AssetTest extends AbstractDaoTestCase {
         assertEquals(DEFAULT_ASSET_NUMBER, assetByUser1.getNumber());
         
         // another user saved some asset concurrently
-        final Asset assetSavedByUser2 = co$.save(co$.new_().setDesc("another new desc"));
+        final Asset assetSavedByUser2 = co$.save(co$.new_().setDesc("another new desc").setAssetType(at1));
         assertTrue(assetSavedByUser2.isPersisted()); 
         assertTrue(co$.entityExists(assetSavedByUser2));
         assertEquals("1", assetSavedByUser2.getNumber());
@@ -127,10 +143,13 @@ public class AssetTest extends AbstractDaoTestCase {
     }
     
     @Test
-    public void can_find_assets_by_fin_det_information() {
-        final Asset asset1 = save(new_(Asset.class).setDesc("a demo asset 1"));
-        final Asset asset2 = save(new_(Asset.class).setDesc("a demo asset 2"));
-        final Asset asset3 = save(new_(Asset.class).setDesc("a demo asset 3"));
+    public void can_find_assets_by_fin_det_information() {       
+        final AssetClass ac1 = save(new_(AssetClass.class).setName("AC1").setDesc("asset class 1").setActive(true));
+        final AssetType at1 = save(new_(AssetType.class).setName("AT1").setDesc("asset type 1").setAssetClass(ac1).setActive(true));
+        
+        final Asset asset1 = save(new_(Asset.class).setDesc("a demo asset 1").setAssetType(at1));
+        final Asset asset2 = save(new_(Asset.class).setDesc("a demo asset 2").setAssetType(at1));
+        final Asset asset3 = save(new_(Asset.class).setDesc("a demo asset 3").setAssetType(at1));
         
         final AssetFinDet finDet1 = co$(AssetFinDet.class).findById(asset1.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel());
         save(finDet1.setInitCost(Money.of("120.00")).setAcquireDate(date("2019-12-07 00:00:00")));

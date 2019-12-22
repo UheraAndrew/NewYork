@@ -34,7 +34,7 @@ public class AssetDao extends CommonEntityDao<Asset> implements IAsset {
     @SessionRequired
     public Asset save(final Asset asset) {
     	final boolean wasPersisted = asset.isPersisted();
-        try {
+    	try {
             if (!wasPersisted) {
                 final IKeyNumber coKeyNumber = co(KeyNumber.class);
                 final Integer nextNumber = coKeyNumber.nextNumber("ASSET_NUMBER");

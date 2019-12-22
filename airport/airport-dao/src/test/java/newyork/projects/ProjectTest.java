@@ -12,6 +12,7 @@ import newyork.assets.AssetFinDet;
 import newyork.assets.IAssetFinDet;
 import newyork.projects.validators.ProjectStartAndFinishDatesValidator;
 import newyork.tablescodes.assets.AssetClass;
+import newyork.tablescodes.assets.AssetType;
 import newyork.test_config.AbstractDaoTestCase;
 import newyork.test_config.UniversalConstantsForTesting;
 import ua.com.fielden.platform.error.Result;
@@ -62,13 +63,15 @@ public class ProjectTest extends AbstractDaoTestCase {
     
     @Test
     public void start_date_cannot_be_assigned_if_new_value_is_after_acquired_date_for_associated_assets() {
+        final AssetType at1 = co(AssetType.class).findByKey("AT1");
+
         final Project project = save(new_(Project.class).setName("PROJECT 1").setStartDate(date("2019-10-01 00:00:00")).setDesc("Project 1 description"));
         
-        final Asset asset1 = save(new_(Asset.class).setDesc("first asset"));
+        final Asset asset1 = save(new_(Asset.class).setDesc("first asset").setAssetType(at1));
         save(co$(AssetFinDet.class).findById(asset1.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2019-10-02 00:00:00")).setProject(project));
-        final Asset asset2 = save(new_(Asset.class).setDesc("second asset"));
+        final Asset asset2 = save(new_(Asset.class).setDesc("second asset").setAssetType(at1));
         save(co$(AssetFinDet.class).findById(asset2.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2019-11-02 00:00:00")).setProject(project));
-        final Asset asset3 = save(new_(Asset.class).setDesc("third asset"));
+        final Asset asset3 = save(new_(Asset.class).setDesc("third asset").setAssetType(at1));
         save(co$(AssetFinDet.class).findById(asset3.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2020-01-02 00:00:00")).setProject(project));
 
         project.setStartDate(date("2019-11-01 00:00:00"));
@@ -78,16 +81,18 @@ public class ProjectTest extends AbstractDaoTestCase {
     
     @Test
     public void finish_date_cannot_be_assigned_if_new_value_is_before_acquired_date_for_associated_assets() {
+        final AssetType at1 = co(AssetType.class).findByKey("AT1");
+
         final Project project = save(new_(Project.class).setName("PROJECT 1")
                 .setStartDate(date("2019-10-01 00:00:00"))
                 .setFinishDate(date("2020-10-01 00:00:00"))
                 .setDesc("Project 1 description"));
         
-        final Asset asset1 = save(new_(Asset.class).setDesc("first asset"));
+        final Asset asset1 = save(new_(Asset.class).setDesc("first asset").setAssetType(at1));
         save(co$(AssetFinDet.class).findById(asset1.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2019-10-02 00:00:00")).setProject(project));
-        final Asset asset2 = save(new_(Asset.class).setDesc("second asset"));
+        final Asset asset2 = save(new_(Asset.class).setDesc("second asset").setAssetType(at1));
         save(co$(AssetFinDet.class).findById(asset2.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2019-11-02 00:00:00")).setProject(project));
-        final Asset asset3 = save(new_(Asset.class).setDesc("third asset"));
+        final Asset asset3 = save(new_(Asset.class).setDesc("third asset").setAssetType(at1));
         save(co$(AssetFinDet.class).findById(asset3.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2020-01-02 00:00:00")).setProject(project));
 
         project.setFinishDate(date("2020-01-01 00:00:00"));
@@ -123,6 +128,10 @@ public class ProjectTest extends AbstractDaoTestCase {
         if (useSavedDataPopulationScript()) {
             return;
         }
+        
+        final AssetClass ac1 = save(new_(AssetClass.class).setName("AC1").setDesc("asset class 1").setActive(true));
+        save(new_(AssetType.class).setName("AT1").setDesc("asset type 1").setAssetClass(ac1).setActive(true));
+    
     }
 
 }
