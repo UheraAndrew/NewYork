@@ -6,16 +6,16 @@ import newyork.assets.Asset;
 import newyork.organisational.BusinessUnit;
 import newyork.organisational.Organisation;
 import newyork.organisational.Role;
-import newyork.tablescodes.assets.definers.AssetTypeOwnershipExclusivityDefiner;
+import newyork.tablescodes.assets.definers.AssetOwnershipExclusivityDefiner;
 import newyork.tablescodes.validators.AssetOwnershipEndTimeValiator;
 import ua.com.fielden.platform.entity.AbstractPersistentEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
-import ua.com.fielden.platform.entity.annotation.KeyType;
-import ua.com.fielden.platform.entity.annotation.KeyTitle;
 import ua.com.fielden.platform.entity.annotation.CompanionObject;
 import ua.com.fielden.platform.entity.annotation.CompositeKeyMember;
 import ua.com.fielden.platform.entity.annotation.DateOnly;
 import ua.com.fielden.platform.entity.annotation.IsProperty;
+import ua.com.fielden.platform.entity.annotation.KeyTitle;
+import ua.com.fielden.platform.entity.annotation.KeyType;
 import ua.com.fielden.platform.entity.annotation.MapEntityTo;
 import ua.com.fielden.platform.entity.annotation.MapTo;
 import ua.com.fielden.platform.entity.annotation.Observable;
@@ -68,19 +68,19 @@ public class AssetOwnership extends AbstractPersistentEntity<DynamicEntityKey> {
     @IsProperty
     @MapTo
     @Title(value = "Role", desc = "Role that owns assets of the specified asset type")
-    @AfterChange(AssetTypeOwnershipExclusivityDefiner.class)
+    @AfterChange(AssetOwnershipExclusivityDefiner.class)
     private Role role;
 
     @IsProperty
     @MapTo
     @Title(value = "Business Unit", desc = "Business unit that owns assets of the specified asset type")
-    @AfterChange(AssetTypeOwnershipExclusivityDefiner.class)
+    @AfterChange(AssetOwnershipExclusivityDefiner.class)
     private BusinessUnit bu;
     
     @IsProperty
     @MapTo
     @Title(value = "Organisation", desc = "Organisation that owns assets of the specified asset type")
-    @AfterChange(AssetTypeOwnershipExclusivityDefiner.class)
+    @AfterChange(AssetOwnershipExclusivityDefiner.class)
     private Organisation org;
     
        

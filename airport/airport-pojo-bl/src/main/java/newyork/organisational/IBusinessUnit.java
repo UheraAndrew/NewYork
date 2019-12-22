@@ -13,8 +13,5 @@ import ua.com.fielden.platform.dao.IEntityDao;
 public interface IBusinessUnit extends IEntityDao<BusinessUnit> {
 
     static final IFetchProvider<BusinessUnit> FETCH_PROVIDER = EntityUtils.fetch(BusinessUnit.class).with(
-        // TODO: uncomment the following line and specify the properties, which are required for the UI. Then remove the line after.
-        // "key", "desc");
-        "Please specify the properties, which are required for the UI");
-
+         "name", "desc");
 }

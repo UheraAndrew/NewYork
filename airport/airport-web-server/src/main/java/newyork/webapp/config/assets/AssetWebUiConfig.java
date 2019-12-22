@@ -109,7 +109,6 @@ public class AssetWebUiConfig {
                 .addProp("assetType").asAutocompleter().also()
                 .addProp("desc").asMultilineText().also()
                 .addProp("active").asCheckbox().also()
-                
                 .addAction(MasterActions.REFRESH).shortDesc("Cancel").longDesc("Cancel action")
                 .addAction(MasterActions.SAVE)
                 .setActionBarLayoutFor(Device.DESKTOP, Optional.empty(), LayoutComposer.mkActionLayoutForMaster())

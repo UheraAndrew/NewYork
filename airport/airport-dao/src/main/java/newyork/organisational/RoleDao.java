@@ -22,8 +22,6 @@ public class RoleDao extends CommonEntityDao<Role> implements IRole {
 
     @Override
     protected IFetchProvider<Role> createFetchProvider() {
-        // TODO: uncomment the following line and specify the properties, which are required for the UI in IRole.FETCH_PROVIDER. Then remove the line after.
-        // return FETCH_PROVIDER;
-        throw new UnsupportedOperationException("Please specify the properties, which are required for the UI in IRole.FETCH_PROVIDER");
+        return FETCH_PROVIDER;
     }
 }
