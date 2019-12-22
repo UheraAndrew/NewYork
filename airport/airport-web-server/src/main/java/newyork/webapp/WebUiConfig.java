@@ -3,16 +3,25 @@ package newyork.webapp;
 import org.apache.commons.lang.StringUtils;
 
 import newyork.assets.Asset;
+import newyork.assets.AssetFinDet;
 import newyork.config.personnel.PersonWebUiConfig;
+import newyork.projects.Project;
 import newyork.tablescodes.assets.AssetClass;
 import newyork.tablescodes.assets.AssetType;
+import newyork.tablescodes.assets.AssetTypeOwnership;
 import newyork.tablescodes.assets.ConditionRating;
 import newyork.tablescodes.assets.ServiceStatus;
+import newyork.webapp.config.assets.AssetFinDetWebUiConfig;
 import newyork.webapp.config.assets.AssetWebUiConfig;
+import newyork.webapp.config.personel.BusinessUnitWebUiConfig;
+import newyork.webapp.config.personel.OrganisationWebUiConfig;
+import newyork.webapp.config.personel.RoleWebUiConfig;
+import newyork.webapp.config.projects.ProjectWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.AssetClassWebUiConfig;
-import newyork.webapp.config.tablescodes.assets.ServiceStatusWebUiConfig;
+import newyork.webapp.config.tablescodes.assets.AssetTypeOwnershipWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.AssetTypeWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.ConditionRatingWebUiConfig;
+import newyork.webapp.config.tablescodes.assets.ServiceStatusWebUiConfig;
 import ua.com.fielden.platform.basic.config.Workflows;
 import ua.com.fielden.platform.web.app.config.IWebUiBuilder;
 import ua.com.fielden.platform.web.interfaces.ILayout.Device;
@@ -75,6 +84,11 @@ public class WebUiConfig extends AbstractWebUiConfig {
 
         // Personnel
         final PersonWebUiConfig personWebUiConfig = PersonWebUiConfig.register(injector(), builder);
+        
+        final BusinessUnitWebUiConfig businessUnitWebUiConfig = BusinessUnitWebUiConfig.register(injector(), builder);
+        final OrganisationWebUiConfig organisationWebUiConfig = OrganisationWebUiConfig.register(injector(), builder);
+        final RoleWebUiConfig roleWebUiConfig = RoleWebUiConfig.register(injector(), builder);
+        
         final UserWebUiConfig userWebUiConfig = new UserWebUiConfig(injector());
         final UserRoleWebUiConfig userRoleWebUiConfig = new UserRoleWebUiConfig(injector());
 
@@ -84,9 +98,14 @@ public class WebUiConfig extends AbstractWebUiConfig {
         final AssetTypeWebUiConfig assetTypeWebUiConfig = AssetTypeWebUiConfig.register(injector(), builder);
         final ServiceStatusWebUiConfig serviceStatusWebUiConfig = ServiceStatusWebUiConfig.register(injector(), builder); 
         final ConditionRatingWebUiConfig conditionRatingWebUiConfig = ConditionRatingWebUiConfig.register(injector(), builder);
+        final AssetTypeOwnershipWebUiConfig assetTypeOwnershipWebUiConfig = AssetTypeOwnershipWebUiConfig.register(injector(), builder);
         
         // Asset
         final AssetWebUiConfig assetWebUiConfig = AssetWebUiConfig.register(injector(), builder);
+        final AssetFinDetWebUiConfig assetFinDetWebUiConfig = AssetFinDetWebUiConfig.register(injector(), builder);
+        
+        // Project related UI
+        final ProjectWebUiConfig projectWebUiConfig = ProjectWebUiConfig.register(injector(), builder);
         
         // Configure application web resources such as masters and centres
         configApp()
@@ -104,27 +123,27 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 description("Asset acquisition module").
                 icon("mainMenu:equipment").
                 detailIcon("mainMenu:equipment").
-                bgColor("#FFE680").
-                captionBgColor("#FFD42A").menu()
-                .addMenuItem(Asset.ENTITY_TITLE).description(String.format("%s Centre", 
-                        Asset.ENTITY_TITLE)).centre(assetWebUiConfig.centre).done()
-                .done().done().
-                
+                bgColor("#80d6ff").
+                captionBgColor("#42a5f5").menu()
+                .addMenuItem(Asset.ENTITY_TITLE).description(String.format("%s Centre", Asset.ENTITY_TITLE)).centre(assetWebUiConfig.centre).done()
+                .addMenuItem(AssetFinDet.ENTITY_TITLE).description(String.format("%s Centre", AssetFinDet.ENTITY_TITLE)).centre(assetFinDetWebUiConfig.centre).done()
+                .addMenuItem(Project.ENTITY_TITLE).description(String.format("%s Centre", Project.ENTITY_TITLE)).centre(projectWebUiConfig.centre).done()
+            .done().done().              
             addModule("Users / Personnel").
                 description("Provides functionality for managing application security and personnel data.").
                 icon("mainMenu:help").
                 detailIcon("mainMenu:about").
-                bgColor("#FFE680").
-                captionBgColor("#FFD42A").menu()
+                bgColor("#c8ff75").
+                captionBgColor("#94ce44").menu()
                 
                 .addMenuItem("Personnel").description("Personnel related data")
                     .addMenuItem("Personnel").description("Personnel Centre").centre(personWebUiConfig.centre).done()
-                .done()
-                
+                    .done()
                 .addMenuItem("Users").description("Users related data")
                     .addMenuItem("Users").description("User centre").centre(userWebUiConfig.centre).done()
                     .addMenuItem("User Roles").description("User roles centre").centre(userRoleWebUiConfig.centre).done()
                 .done()
+                
             .done().done().
             
             addModule("Table Codes").
@@ -134,16 +153,23 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 bgColor("#FFE680").
                 captionBgColor("#FFD42A").menu()
             .addMenuItem("Asset Table Codes").description("Various master data for assets.")
-                .addMenuItem(AssetClass.ENTITY_TITLE).description(String.format("%s Centre", AssetClass.ENTITY_TITLE))
-                .centre(assetClassWebUiConfig.centre).done()
-                .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", AssetType.ENTITY_TITLE))
-                .centre(assetTypeWebUiConfig.centre).done()
-                .addMenuItem(ServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", 
-                        ServiceStatus.ENTITY_TITLE)).centre(serviceStatusWebUiConfig.centre).done()
-                .addMenuItem(ConditionRating.ENTITY_TITLE).description(String.format("%s Centre", 
-                    ConditionRating.ENTITY_TITLE)).centre(conditionRatingWebUiConfig.centre).done()
+                .addMenuItem(AssetClass.ENTITY_TITLE).description(String.format("%s Centre", AssetClass.ENTITY_TITLE)).centre(assetClassWebUiConfig.centre).done()
+                .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", AssetType.ENTITY_TITLE)).centre(assetTypeWebUiConfig.centre).done()
+                .addMenuItem(ServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", ServiceStatus.ENTITY_TITLE)).centre(serviceStatusWebUiConfig.centre).done()
+                .addMenuItem(ConditionRating.ENTITY_TITLE).description(String.format("%s Centre", ConditionRating.ENTITY_TITLE)).centre(conditionRatingWebUiConfig.centre).done()
+                .addMenuItem(AssetTypeOwnership.ENTITY_TITLE).description(String.format("%s Centre", AssetTypeOwnership.ENTITY_TITLE)).centre(assetTypeOwnershipWebUiConfig.centre).done()
+                .done()
+                .addMenuItem("Asset Owners").description("Creation of Asset owners")
+                    
+                    .addMenuItem("Role").description("Role Centre").centre(roleWebUiConfig.centre).done()
+          
+                    .addMenuItem("Business Unit").description("Business Unit Centre").centre(businessUnitWebUiConfig.centre).done()
+            
+                    .addMenuItem("Organization").description("Organization Centre").centre(organisationWebUiConfig.centre).done()
+            .done()
+          
             .done().
-            done().done()
+            done()
         .setLayoutFor(Device.DESKTOP, null, "[[[{\"rowspan\":2}], []], [[]]]")
         .setLayoutFor(Device.TABLET, null,  "[[[{\"rowspan\":2}], []], [[]]]")
         .setLayoutFor(Device.MOBILE, null, "[[[]],[[]], [[]]]")

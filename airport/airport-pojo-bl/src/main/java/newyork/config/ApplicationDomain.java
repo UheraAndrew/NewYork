@@ -18,6 +18,12 @@ import newyork.assets.Asset;
 import newyork.tablescodes.assets.ui_actions.OpenAssetClassMasterAction;
 import newyork.tablescodes.assets.master.menu.actions.AssetClassMaster_OpenMain_MenuItem;
 import newyork.tablescodes.assets.master.menu.actions.AssetClassMaster_OpenAssetType_MenuItem;
+import newyork.assets.AssetFinDet;
+import newyork.projects.Project;
+import newyork.organisational.Role;
+import newyork.organisational.BusinessUnit;
+import newyork.organisational.Organisation;
+import newyork.tablescodes.assets.AssetTypeOwnership;
 
 /**
  * A class to register domain entities.
@@ -35,8 +41,8 @@ public class ApplicationDomain implements IApplicationDomainProvider {
     }
 
     /**
-                             * This is a static initialisation block where all entity types should be registered.
-                             */
+                    	                             * This is a static initialisation block where all entity types should be registered.
+                    	                             */
     static {
         entityTypes.addAll(PlatformDomainTypes.types);
         add(Person.class);
@@ -48,6 +54,12 @@ public class ApplicationDomain implements IApplicationDomainProvider {
         add(OpenAssetClassMasterAction.class);
         add(AssetClassMaster_OpenMain_MenuItem.class);
         add(AssetClassMaster_OpenAssetType_MenuItem.class);
+        add(AssetFinDet.class);
+        add(Project.class);
+        add(Role.class);
+        add(BusinessUnit.class);
+        add(Organisation.class);
+        add(AssetTypeOwnership.class);
     }
 
     @Override

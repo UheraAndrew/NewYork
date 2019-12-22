@@ -155,5 +155,7 @@ public class Person extends ActivatableAbstractEntity<String> {
     public boolean isUser() {
         return getUser() != null;
     }
+    
+    
 
 }

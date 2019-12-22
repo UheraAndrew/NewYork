@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+\<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -13,9 +13,9 @@
 
 	<name>New York Airport Asset Management Web Server Module</name>
 	<description>
-A module representing the web server side of the application.
-It binds together all platform core and application specific web resources in to a single standalone application server.
-</description>
+	A module representing the web server side of the application.
+	It binds together all platform core and application specific web resources in to a single standalone application server.
+	</description>
 
 	<properties>
 		<staging.dir>${project.build.directory}</staging.dir>

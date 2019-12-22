@@ -4,31 +4,34 @@ import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.expr;
 import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.select;
 
 import newyork.tablescodes.assets.AssetType;
+
 import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
-import ua.com.fielden.platform.entity.annotation.KeyType;
-import ua.com.fielden.platform.entity.annotation.KeyTitle;
-import ua.com.fielden.platform.entity.annotation.Calculated;
+import ua.com.fielden.platform.entity.query.model.ExpressionModel;
+
 import ua.com.fielden.platform.entity.annotation.CompanionObject;
 import ua.com.fielden.platform.entity.annotation.CompositeKeyMember;
+import ua.com.fielden.platform.entity.annotation.DescRequired;
+import ua.com.fielden.platform.entity.annotation.DescTitle;
+import ua.com.fielden.platform.entity.annotation.DisplayDescription;
+import ua.com.fielden.platform.entity.annotation.IsProperty;
+import ua.com.fielden.platform.entity.annotation.KeyTitle;
+import ua.com.fielden.platform.entity.annotation.KeyType;
+import ua.com.fielden.platform.entity.annotation.Calculated;
 import ua.com.fielden.platform.entity.annotation.MapEntityTo;
 import ua.com.fielden.platform.entity.annotation.MapTo;
 import ua.com.fielden.platform.entity.annotation.Observable;
 import ua.com.fielden.platform.entity.annotation.Readonly;
 import ua.com.fielden.platform.entity.annotation.Required;
 import ua.com.fielden.platform.entity.annotation.Title;
-import ua.com.fielden.platform.entity.query.model.ExpressionModel;
-import ua.com.fielden.platform.entity.annotation.DescTitle;
-import ua.com.fielden.platform.entity.annotation.DisplayDescription;
-import ua.com.fielden.platform.entity.annotation.IsProperty;
-import ua.com.fielden.platform.entity.annotation.DescRequired;
+
 import ua.com.fielden.platform.reflection.TitlesDescsGetter;
 import ua.com.fielden.platform.utils.Pair;
 
 /**
  * Master entity object.
  *
- * @author Developers
+ * @author NewYork
  *
  */
 
@@ -52,7 +55,20 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     @Readonly
     private String number;
     
-    
+    @IsProperty
+    @Title(value = "Fin Det", desc = "Financial details for this asset")
+    private AssetFinDet finDet;
+
+    @Observable
+    protected Asset setFinDet(final AssetFinDet finDet) {
+        this.finDet = finDet;
+        return this;
+    }
+
+    public AssetFinDet getFinDet() {
+        return finDet;
+    }
+
     @Observable
     public Asset setNumber(final String number) {
         this.number = number;

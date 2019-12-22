@@ -1,7 +1,6 @@
-package newyork.tablescodes.assets;
+package newyork.organisational;
 
-import ua.com.fielden.platform.entity.AbstractEntity;
-import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
+import ua.com.fielden.platform.entity.AbstractPersistentEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.KeyType;
 import ua.com.fielden.platform.entity.annotation.KeyTitle;
@@ -10,7 +9,6 @@ import ua.com.fielden.platform.entity.annotation.CompositeKeyMember;
 import ua.com.fielden.platform.entity.annotation.MapEntityTo;
 import ua.com.fielden.platform.entity.annotation.MapTo;
 import ua.com.fielden.platform.entity.annotation.Observable;
-import ua.com.fielden.platform.entity.annotation.Required;
 import ua.com.fielden.platform.entity.annotation.Title;
 import ua.com.fielden.platform.entity.annotation.DescTitle;
 import ua.com.fielden.platform.entity.annotation.DisplayDescription;
@@ -26,26 +24,26 @@ import ua.com.fielden.platform.utils.Pair;
  *
  */
 @KeyType(DynamicEntityKey.class)
-@KeyTitle("Asset Type")
-@CompanionObject(IAssetType.class)
+@KeyTitle("Name")
+@CompanionObject(IOrganisation.class)
 @MapEntityTo
-@DescTitle("Asset Type description")
+@DescTitle("Description")
 @DisplayDescription
 @DescRequired
-public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
+public class Organisation extends AbstractPersistentEntity<DynamicEntityKey> {
 
-    private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(AssetType.class);
+    private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(Organisation.class);
     public static final String ENTITY_TITLE = entityTitleAndDesc.getKey();
     public static final String ENTITY_DESC = entityTitleAndDesc.getValue();
 
     @IsProperty
     @MapTo
-    @Title(value = "Name", desc = "Asset Type name")
+    @Title(value = "Name", desc = "Organisation name")
     @CompositeKeyMember(1)
     private String name;
 
     @Observable
-    public AssetType setName(final String name) {
+    public Organisation setName(final String name) {
         this.name = name;
         return this;
     }
@@ -56,31 +54,11 @@ public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
     
     @Override
     @Observable
-    public AssetType setDesc(String desc) {
+    public Organisation setDesc(String desc) {
         super.setDesc(desc);
         return this;
-        }
- 
-    @IsProperty
-    @MapTo
-    @Title(value = "Asset Class", desc = "The class of this asset type")
-    @Required
-    private AssetClass assetClass;
-
-    @Observable
-    public AssetType setAssetClass(final AssetClass assetClass) {
-        this.assetClass = assetClass;
-        return this;
     }
 
-    public AssetClass getAssetClass() {
-        return assetClass;
-    }
     
-    @Override
-    @Observable
-    public AssetType setActive(boolean active) {
-        super.setActive(active);
-        return this;
-    }
+
 }

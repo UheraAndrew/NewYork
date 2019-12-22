@@ -1,4 +1,4 @@
-package newyork.webapp.config.assets;
+package newyork.webapp.config.projects;
 
 import static java.lang.String.format;
 import static newyork.common.StandardScrollingConfigs.standardStandaloneScrollingConfig;
@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import com.google.inject.Injector;
 
-import newyork.assets.Asset;
+import newyork.projects.Project;
 import newyork.common.LayoutComposer;
 import newyork.common.StandardActions;
 
@@ -20,29 +20,27 @@ import ua.com.fielden.platform.web.view.master.api.actions.MasterActions;
 import ua.com.fielden.platform.web.view.master.api.impl.SimpleMasterBuilder;
 import ua.com.fielden.platform.web.view.master.api.IMaster;
 import ua.com.fielden.platform.web.app.config.IWebUiBuilder;
-import newyork.main.menu.assets.MiAsset;
-import newyork.tablescodes.assets.AssetClass;
-import newyork.tablescodes.assets.AssetType;
+import newyork.main.menu.projects.MiProject;
 import ua.com.fielden.platform.web.centre.EntityCentre;
 import ua.com.fielden.platform.web.view.master.EntityMaster;
 import static ua.com.fielden.platform.web.PrefDim.mkDim;
 import ua.com.fielden.platform.web.PrefDim.Unit;
 /**
- * {@link Asset} Web UI configuration.
+ * {@link Project} Web UI configuration.
  *
  * @author Developers
  *
  */
-public class AssetWebUiConfig {
+public class ProjectWebUiConfig {
 
-    public final EntityCentre<Asset> centre;
-    public final EntityMaster<Asset> master;
+    public final EntityCentre<Project> centre;
+    public final EntityMaster<Project> master;
 
-    public static AssetWebUiConfig register(final Injector injector, final IWebUiBuilder builder) {
-        return new AssetWebUiConfig(injector, builder);
+    public static ProjectWebUiConfig register(final Injector injector, final IWebUiBuilder builder) {
+        return new ProjectWebUiConfig(injector, builder);
     }
 
-    private AssetWebUiConfig(final Injector injector, final IWebUiBuilder builder) {
+    private ProjectWebUiConfig(final Injector injector, final IWebUiBuilder builder) {
         centre = createCentre(injector, builder);
         builder.register(centre);
         master = createMaster(injector);
@@ -50,66 +48,61 @@ public class AssetWebUiConfig {
     }
 
     /**
-     * Creates entity centre for {@link Asset}.
+     * Creates entity centre for {@link Project}.
      *
      * @param injector
      * @return created entity centre
      */
-    private EntityCentre<Asset> createCentre(final Injector injector, final IWebUiBuilder builder) {
-        final String layout = LayoutComposer.mkVarGridForCentre(2, 2, 1);
-        final EntityActionConfig standardNewAction = StandardActions.NEW_ACTION.mkAction(Asset.class);
-        final EntityActionConfig standardDeleteAction = StandardActions.DELETE_ACTION.mkAction(Asset.class);
-        final EntityActionConfig standardExportAction = StandardActions.EXPORT_ACTION.mkAction(Asset.class);
-        final EntityActionConfig standardEditAction = StandardActions.EDIT_ACTION.mkAction(Asset.class);
-        final EntityActionConfig standardSortAction = CentreConfigActions.CUSTOMISE_COLUMNS_ACTION.mkAction();
-        builder.registerOpenMasterAction(Asset.class, standardEditAction);
+    private EntityCentre<Project> createCentre(final Injector injector, final IWebUiBuilder builder) {
+        final String layout = LayoutComposer.mkGridForCentre(2, 2);
 
-        final EntityCentreConfig <Asset> ecc = EntityCentreBuilder.centreFor(Asset.class)
+        final EntityActionConfig standardNewAction = StandardActions.NEW_ACTION.mkAction(Project.class);
+        final EntityActionConfig standardExportAction = StandardActions.EXPORT_ACTION.mkAction(Project.class);
+        final EntityActionConfig standardEditAction = StandardActions.EDIT_ACTION.mkAction(Project.class);
+        final EntityActionConfig standardSortAction = CentreConfigActions.CUSTOMISE_COLUMNS_ACTION.mkAction();
+        builder.registerOpenMasterAction(Project.class, standardEditAction);
+
+        final EntityCentreConfig<Project> ecc = EntityCentreBuilder.centreFor(Project.class)
                 //.runAutomatically()
                 .addFrontAction(standardNewAction)
                 .addTopAction(standardNewAction).also()
-                .addTopAction(standardDeleteAction).also()
                 .addTopAction(standardSortAction).also()
                 .addTopAction(standardExportAction)
-                .addCrit("this").asMulti().autocompleter(Asset.class).also()
-                .addCrit("assetType").asMulti().autocompleter(AssetType.class).also()
+                .addCrit("this").asMulti().autocompleter(Project.class).also()
                 .addCrit("desc").asMulti().text().also()
-                .addCrit("finDet.initCost").asRange().decimal().also()
-                .addCrit("finDet.acquireDate").asRange().date().also()
-                .addCrit("active").asMulti().bool()
+                .addCrit("startDate").asRange().date().also()
+                .addCrit("finishDate").asRange().date()
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
                 .withScrollingConfig(standardStandaloneScrollingConfig(0))
-                .addProp("this").order(1).asc().minWidth(100)
-                    .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", Asset.ENTITY_TITLE))
+                .addProp("this").order(1).asc().width(150)
+                    .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", Project.ENTITY_TITLE))
                     .withAction(standardEditAction).also()
                 .addProp("desc").minWidth(200).also()
-                .addProp("finDet.initCost").width(150).also()
-                .addProp("finDet.acquireDate").width(150).also()
-                .addProp("assetType").width(100).withActionSupplier(builder.getOpenMasterAction(AssetType.class)).also()
-                .addProp("active").minWidth(100)
+                .addProp("startDate").width(150).also()
+                .addProp("finishDate").width(150)
+                //.addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
                 .addPrimaryAction(standardEditAction)
                 .build();
 
-        return new EntityCentre<>(MiAsset.class, MiAsset.class.getSimpleName(), ecc, injector, null);
+        return new EntityCentre<>(MiProject.class, MiProject.class.getSimpleName(), ecc, injector, null);
     }
 
     /**
-     * Creates entity master for {@link Asset}.
+     * Creates entity master for {@link Project}.
      *
      * @param injector
      * @return created entity master
      */
-    private EntityMaster<Asset> createMaster(final Injector injector) {
-        final String layout = LayoutComposer.mkGridForMasterFitWidth(4, 1);
+    private EntityMaster<Project> createMaster(final Injector injector) {
+        final String layout = LayoutComposer.mkVarGridForMasterFitWidth(1, 1, 2);
 
-        final IMaster<Asset> masterConfig = new SimpleMasterBuilder<Asset>().forEntity(Asset.class)
-                .addProp("number").asSinglelineText().also()
-                .addProp("assetType").asAutocompleter().also()
+        final IMaster<Project> masterConfig = new SimpleMasterBuilder<Project>().forEntity(Project.class)
+                .addProp("name").asSinglelineText().also()
                 .addProp("desc").asMultilineText().also()
-                .addProp("active").asCheckbox().also()
-                
+                .addProp("startDate").asDatePicker().also()
+                .addProp("finishDate").asDatePicker().also()
                 .addAction(MasterActions.REFRESH).shortDesc("Cancel").longDesc("Cancel action")
                 .addAction(MasterActions.SAVE)
                 .setActionBarLayoutFor(Device.DESKTOP, Optional.empty(), LayoutComposer.mkActionLayoutForMaster())
@@ -119,6 +112,6 @@ public class AssetWebUiConfig {
                 .withDimensions(mkDim(LayoutComposer.SIMPLE_ONE_COLUMN_MASTER_DIM_WIDTH, 480, Unit.PX))
                 .done();
 
-        return new EntityMaster<>(Asset.class, masterConfig, injector);
+        return new EntityMaster<>(Project.class, masterConfig, injector);
     }
 }
