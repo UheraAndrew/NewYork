@@ -24,6 +24,7 @@ import newyork.organisational.Role;
 import newyork.organisational.BusinessUnit;
 import newyork.organisational.Organisation;
 import newyork.tablescodes.assets.AssetTypeOwnership;
+import newyork.tablescodes.assets.AssetOwnership;
 
 /**
  * A class to register domain entities.
@@ -41,8 +42,8 @@ public class ApplicationDomain implements IApplicationDomainProvider {
     }
 
     /**
-                    	                             * This is a static initialisation block where all entity types should be registered.
-                    	                             */
+                        	                             * This is a static initialisation block where all entity types should be registered.
+                        	                             */
     static {
         entityTypes.addAll(PlatformDomainTypes.types);
         add(Person.class);
@@ -60,6 +61,7 @@ public class ApplicationDomain implements IApplicationDomainProvider {
         add(BusinessUnit.class);
         add(Organisation.class);
         add(AssetTypeOwnership.class);
+        add(AssetOwnership.class);
     }
 
     @Override
