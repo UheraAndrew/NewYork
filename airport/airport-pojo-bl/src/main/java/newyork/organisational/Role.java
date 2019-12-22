@@ -1,5 +1,6 @@
 package newyork.organisational;
 
+import ua.com.fielden.platform.entity.AbstractEntity;
 import ua.com.fielden.platform.entity.AbstractPersistentEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.KeyType;
@@ -50,6 +51,13 @@ public class Role extends AbstractPersistentEntity<DynamicEntityKey> {
 
     public String getName() {
         return name;
+    }
+    
+    @Override
+    @Observable
+    public Role setDesc(String desc) {
+        super.setDesc(desc);
+        return this;
     }
 
     

@@ -51,6 +51,13 @@ public class Organisation extends AbstractPersistentEntity<DynamicEntityKey> {
     public String getName() {
         return name;
     }
+    
+    @Override
+    @Observable
+    public Organisation setDesc(String desc) {
+        super.setDesc(desc);
+        return this;
+    }
 
     
 

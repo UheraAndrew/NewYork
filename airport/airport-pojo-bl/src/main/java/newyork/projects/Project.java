@@ -3,6 +3,7 @@ package newyork.projects;
 import java.util.Date;
 
 import newyork.projects.validators.ProjectStartAndFinishDatesValidator;
+import ua.com.fielden.platform.entity.AbstractEntity;
 import ua.com.fielden.platform.entity.AbstractPersistentEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.KeyType;
@@ -99,6 +100,14 @@ public class Project extends AbstractPersistentEntity<DynamicEntityKey> {
 
     public String getName() {
         return name;
+    }
+    
+    @Override
+    @Observable
+    public Project setDesc(String desc) {
+        // TODO Auto-generated method stub
+        super.setDesc(desc);
+        return this;
     }
 
     

@@ -24,7 +24,7 @@ import ua.com.fielden.platform.utils.Pair;
  *
  */
 @KeyType(DynamicEntityKey.class)
-@KeyTitle("Name")
+@KeyTitle("BusinessUnit number")
 @CompanionObject(IBusinessUnit.class)
 @MapEntityTo
 @DescTitle("Description")
@@ -51,8 +51,12 @@ public class BusinessUnit extends AbstractPersistentEntity<DynamicEntityKey> {
     public String getName() {
         return name;
     }
-
     
-
+    @Override
+    @Observable
+    public BusinessUnit setDesc(String desc) {
+        super.setDesc(desc);
+        return this;
+    }
     
 }

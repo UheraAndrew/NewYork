@@ -5,6 +5,7 @@ import java.util.Date;
 import newyork.assets.definers.AssetFinDetProjectDefiner;
 import newyork.assets.validators.AssetFinDetAcquireDateWithinProjectPeriodValidator;
 import newyork.projects.Project;
+import ua.com.fielden.platform.entity.AbstractEntity;
 import ua.com.fielden.platform.entity.AbstractPersistentEntity;
 import ua.com.fielden.platform.entity.annotation.CompanionObject;
 import ua.com.fielden.platform.entity.annotation.DateOnly;
@@ -106,5 +107,11 @@ public class AssetFinDet extends AbstractPersistentEntity<Asset> {
     public Money getInitCost() {
         return initCost;
     }
-
+    
+    @Override
+    @Observable
+    public AssetFinDet setDesc(String desc) {
+        super.setDesc(desc);
+        return this;
+    }
 }

@@ -13,6 +13,9 @@ import newyork.tablescodes.assets.ConditionRating;
 import newyork.tablescodes.assets.ServiceStatus;
 import newyork.webapp.config.assets.AssetFinDetWebUiConfig;
 import newyork.webapp.config.assets.AssetWebUiConfig;
+import newyork.webapp.config.personel.BusinessUnitWebUiConfig;
+import newyork.webapp.config.personel.OrganisationWebUiConfig;
+import newyork.webapp.config.personel.RoleWebUiConfig;
 import newyork.webapp.config.projects.ProjectWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.AssetClassWebUiConfig;
 import newyork.webapp.config.tablescodes.assets.AssetTypeOwnershipWebUiConfig;
@@ -81,6 +84,11 @@ public class WebUiConfig extends AbstractWebUiConfig {
 
         // Personnel
         final PersonWebUiConfig personWebUiConfig = PersonWebUiConfig.register(injector(), builder);
+        
+        final BusinessUnitWebUiConfig businessUnitWebUiConfig = BusinessUnitWebUiConfig.register(injector(), builder);
+        final OrganisationWebUiConfig organisationWebUiConfig = OrganisationWebUiConfig.register(injector(), builder);
+        final RoleWebUiConfig roleWebUiConfig = RoleWebUiConfig.register(injector(), builder);
+        
         final UserWebUiConfig userWebUiConfig = new UserWebUiConfig(injector());
         final UserRoleWebUiConfig userRoleWebUiConfig = new UserRoleWebUiConfig(injector());
 
@@ -131,8 +139,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 
                 .addMenuItem("Personnel").description("Personnel related data")
                     .addMenuItem("Personnel").description("Personnel Centre").centre(personWebUiConfig.centre).done()
-                .done()
-                
+                    .done()
                 .addMenuItem("Users").description("Users related data")
                     .addMenuItem("Users").description("User centre").centre(userWebUiConfig.centre).done()
                     .addMenuItem("User Roles").description("User roles centre").centre(userRoleWebUiConfig.centre).done()
@@ -152,8 +159,18 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 .addMenuItem(ServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", ServiceStatus.ENTITY_TITLE)).centre(serviceStatusWebUiConfig.centre).done()
                 .addMenuItem(ConditionRating.ENTITY_TITLE).description(String.format("%s Centre", ConditionRating.ENTITY_TITLE)).centre(conditionRatingWebUiConfig.centre).done()
                 .addMenuItem(AssetTypeOwnership.ENTITY_TITLE).description(String.format("%s Centre", AssetTypeOwnership.ENTITY_TITLE)).centre(assetTypeOwnershipWebUiConfig.centre).done()
+                .done()
+                .addMenuItem("Asset Owners").description("Creation of Asset owners")
+                    
+                    .addMenuItem("Role").description("Role Centre").centre(roleWebUiConfig.centre).done()
+          
+                    .addMenuItem("Business Unit").description("Business Unit Centre").centre(businessUnitWebUiConfig.centre).done()
+            
+                    .addMenuItem("Organization").description("Organization Centre").centre(organisationWebUiConfig.centre).done()
+            .done()
+          
             .done().
-            done().done()
+            done()
         .setLayoutFor(Device.DESKTOP, null, "[[[{\"rowspan\":2}], []], [[]]]")
         .setLayoutFor(Device.TABLET, null,  "[[[{\"rowspan\":2}], []], [[]]]")
         .setLayoutFor(Device.MOBILE, null, "[[[]],[[]], [[]]]")
