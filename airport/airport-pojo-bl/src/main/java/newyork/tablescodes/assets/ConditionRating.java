@@ -1,16 +1,22 @@
 package newyork.tablescodes.assets;
 
+import java.util.Date;
+
+import newyork.tablescodes.validators.ConditionRatingEndTimeValiator;
 import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.KeyType;
 import ua.com.fielden.platform.entity.annotation.KeyTitle;
 import ua.com.fielden.platform.entity.annotation.CompanionObject;
 import ua.com.fielden.platform.entity.annotation.CompositeKeyMember;
+import ua.com.fielden.platform.entity.annotation.DateOnly;
 import ua.com.fielden.platform.entity.annotation.MapEntityTo;
 import ua.com.fielden.platform.entity.annotation.MapTo;
 import ua.com.fielden.platform.entity.annotation.Observable;
 import ua.com.fielden.platform.entity.annotation.Required;
 import ua.com.fielden.platform.entity.annotation.Title;
+import ua.com.fielden.platform.entity.annotation.mutator.BeforeChange;
+import ua.com.fielden.platform.entity.annotation.mutator.Handler;
 import ua.com.fielden.platform.entity.annotation.DescTitle;
 import ua.com.fielden.platform.entity.annotation.DisplayDescription;
 import ua.com.fielden.platform.entity.annotation.IsProperty;
@@ -53,21 +59,44 @@ public class ConditionRating extends ActivatableAbstractEntity<DynamicEntityKey>
         return name;
     }
     
+    
     @IsProperty
     @MapTo
-    @Title(value = "Maintenance and/or replacement date", desc = "Asset Type maintance/replacement")
-    private String planDate;
+    @Title(value = "Start Repair", desc = "The start date of the replacement/maintainance")
+    @CompositeKeyMember(2)
+    @DateOnly
+    private Date startRepair;
+
+    @IsProperty
+    @MapTo
+    @Title(value = "End Repair ", desc = "The end date of the replacement/maintainance")
+    @CompositeKeyMember(3)
+    @DateOnly
+    @BeforeChange({
+        @Handler(ConditionRatingEndTimeValiator.class)
+    })
+    private Date endRepair;
 
     @Observable
-    public ConditionRating setPlanDate(final String planDate) {
-        this.planDate = planDate;
+    public ConditionRating setStartRepair(final Date startRepair) {
+        this.startRepair = startRepair;
         return this;
     }
 
-    public String getPlanDate() {
-        return planDate;
+    public Date getStartRepair() {
+        return startRepair;
     }
-    
+
+    @Observable
+    public ConditionRating setEndRepair(final Date endRepair) {
+        this.endRepair = endRepair;
+        return this;
+    }
+
+    public Date getEndRepair() {
+        return endRepair;
+    }
+
     @IsProperty
     @MapTo
     @Required

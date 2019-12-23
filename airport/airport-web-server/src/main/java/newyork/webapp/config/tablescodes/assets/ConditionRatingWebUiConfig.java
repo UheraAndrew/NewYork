@@ -58,7 +58,7 @@ public class ConditionRatingWebUiConfig {
      * @return created entity centre
      */
     private EntityCentre<ConditionRating> createCentre(final Injector injector, final IWebUiBuilder builder) {
-        final String layout = LayoutComposer.mkGridForCentre(2, 2);
+        final String layout = LayoutComposer.mkGridForCentre(2, 3);
 
         final EntityActionConfig standardNewAction = StandardActions.NEW_ACTION.mkAction(ConditionRating.class);
         final EntityActionConfig standardDeleteAction = StandardActions.DELETE_ACTION.mkAction(ConditionRating.class);
@@ -76,7 +76,7 @@ public class ConditionRatingWebUiConfig {
                 .addTopAction(standardExportAction)
                 .addCrit("this").asMulti().autocompleter(ConditionRating.class).also()
                 .addCrit("desc").asMulti().text().also()
-                .addCrit("planDate").asMulti().text().also()
+                .addCrit("startRepair").asRange().date().also()
                 .addCrit("assetType").asMulti().autocompleter(AssetType.class)
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
@@ -85,8 +85,8 @@ public class ConditionRatingWebUiConfig {
                 .addProp("this").order(1).asc().minWidth(100)
                     .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", ConditionRating.ENTITY_TITLE))
                     .withAction(standardEditAction).also()
+                .addProp("startRepair").order(2).desc().width(150).also()
                 .addProp("desc").minWidth(100).also()
-                .addProp("planDate").minWidth(100).also()
                 .addProp("assetType").width(100).withActionSupplier(builder.getOpenMasterAction(AssetType.class))
                 //.addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
                 .addPrimaryAction(standardEditAction)
@@ -102,12 +102,13 @@ public class ConditionRatingWebUiConfig {
      * @return created entity master
      */
     private EntityMaster<ConditionRating> createMaster(final Injector injector) {
-        final String layout = LayoutComposer.mkGridForMasterFitWidth(4, 1);
+        final String layout = LayoutComposer.mkGridForMasterFitWidth(5, 1);
 
         final IMaster<ConditionRating> masterConfig = new SimpleMasterBuilder<ConditionRating>().forEntity(ConditionRating.class)
                 .addProp("name").asSinglelineText().also()
                 .addProp("desc").asMultilineText().also()
-                .addProp("planDate").asMultilineText().also()
+                .addProp("startRepair").asDatePicker().also()
+                .addProp("endRepair").asDatePicker().also()
                 .addProp("assetType").asAutocompleter().also()
                 .addAction(MasterActions.REFRESH).shortDesc("Cancel").longDesc("Cancel action")
                 .addAction(MasterActions.SAVE)
