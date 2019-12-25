@@ -22,6 +22,7 @@ import newyork.personnel.Person;
 import newyork.projects.Project;
 import newyork.tablescodes.assets.AssetClass;
 import newyork.tablescodes.assets.AssetType;
+import newyork.tablescodes.assets.AssetTypeOwnership;
 import ua.com.fielden.platform.devdb_support.DomainDrivenDataPopulation;
 import ua.com.fielden.platform.entity.AbstractEntity;
 import ua.com.fielden.platform.persistence.HibernateUtil;
@@ -107,13 +108,16 @@ public class PopulateDb extends DomainDrivenDataPopulation {
         save(finDet3.setInitCost(Money.of("10.00")));
         
         // Projects
-        save(new_(Project.class).setName("Project 1").setStartDate(date("2019-12-08 00:00:00")).setDesc("Project 1 description"));
-        save(new_(Project.class).setName("Project 2").setStartDate(date("2020-01-02 00:00:00")).setDesc("Project 2 description"));
+        Project p1 = save(new_(Project.class).setName("Project 1").setStartDate(date("2019-12-08 00:00:00")).setDesc("Project 1 description"));
+        Project p2 = save(new_(Project.class).setName("Project 2").setStartDate(date("2020-01-02 00:00:00")).setDesc("Project 2 description"));
         
         // for AssetTypeOwnership
-        save(new_(Role.class).setName("R1").setDesc("First role"));
-        save(new_(BusinessUnit.class).setName("BU1").setDesc("First business unit"));
-        save(new_(Organisation.class).setName("ORG1").setDesc("First organisation"));
+        Role r1 = save(new_(Role.class).setName("R1").setDesc("First role"));
+        BusinessUnit bu1 = save(new_(BusinessUnit.class).setName("BU1").setDesc("First business unit"));
+        Organisation o3 = save(new_(Organisation.class).setName("ORG1").setDesc("First organisation"));
+        
+        AssetTypeOwnership ao1 = save(new_(AssetTypeOwnership.class).setStartDate(date("2019-12-02 00:00:00")).setBu(bu1).setAssetType(at1).setDesc("Asset Type Ownership 1"));
+        
         
         LOGGER.info("Completed database creation and population.");
 	}

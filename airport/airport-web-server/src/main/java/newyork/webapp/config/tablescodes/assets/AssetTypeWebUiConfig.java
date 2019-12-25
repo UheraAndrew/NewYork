@@ -23,6 +23,9 @@ import ua.com.fielden.platform.web.view.master.api.impl.SimpleMasterBuilder;
 import ua.com.fielden.platform.web.view.master.api.IMaster;
 import ua.com.fielden.platform.web.app.config.IWebUiBuilder;
 import newyork.main.menu.tablescodes.assets.MiAssetType;
+import newyork.organisational.BusinessUnit;
+import newyork.organisational.Organisation;
+import newyork.organisational.Role;
 import ua.com.fielden.platform.web.centre.EntityCentre;
 import ua.com.fielden.platform.web.view.master.EntityMaster;
 import static ua.com.fielden.platform.web.PrefDim.mkDim;
@@ -56,7 +59,7 @@ public class AssetTypeWebUiConfig {
      * @return created entity centre
      */
     private EntityCentre<AssetType> createCentre(final Injector injector, final IWebUiBuilder builder) {
-        final String layout = LayoutComposer.mkVarGridForCentre(2, 2);
+        final String layout = LayoutComposer.mkVarGridForCentre(2, 2, 3, 1);
 
         final EntityActionConfig standardNewAction = StandardActions.NEW_ACTION.mkAction(AssetType.class);
         final EntityActionConfig standardDeleteAction = StandardActions.DELETE_ACTION.mkAction(AssetType.class);
@@ -75,7 +78,11 @@ public class AssetTypeWebUiConfig {
                 .addCrit("this").asMulti().autocompleter(AssetType.class).also()
                 .addCrit("desc").asMulti().text().also()
                 .addCrit("assetClass").asMulti().autocompleter(AssetClass.class).also()
-                .addCrit("active").asMulti().bool()
+                .addCrit("active").asMulti().bool().also()
+                .addCrit("currOwnership.role").asMulti().autocompleter(Role.class).also()
+                .addCrit("currOwnership.bu").asMulti().autocompleter(BusinessUnit.class).also()
+                .addCrit("currOwnership.org").asMulti().autocompleter(Organisation.class).also()
+                .addCrit("currOwnership.startDate").asRange().date()
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
@@ -86,8 +93,11 @@ public class AssetTypeWebUiConfig {
                 .addProp("desc").minWidth(100).also()
                 .addProp("assetClass").width(100)
                     .withActionSupplier(builder.getOpenMasterAction(AssetClass.class)).also()
-                .addProp("active").width(100)
-                //.addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
+                .addProp("active").width(100).also()
+                .addProp("currOwnership.role").width(100).also()
+                .addProp("currOwnership.bu").width(100).also()
+                .addProp("currOwnership.org").width(100).also()
+                .addProp("currOwnership.startDate").width(150)
                 .addPrimaryAction(standardEditAction)
                 .build();
 
@@ -101,20 +111,24 @@ public class AssetTypeWebUiConfig {
      * @return created entity master
      */
     private EntityMaster<AssetType> createMaster(final Injector injector) {
-        final String layout = LayoutComposer.mkGridForMasterFitWidth(4, 1);
+        final String layout = LayoutComposer.mkVarGridForMasterFitWidth(1, 1, 2, 4);
 
         final IMaster<AssetType> masterConfig = new SimpleMasterBuilder<AssetType>().forEntity(AssetType.class)
                 .addProp("name").asSinglelineText().also()
                 .addProp("desc").asMultilineText().also()
                 .addProp("assetClass").asAutocompleter().also()
                 .addProp("active").asCheckbox().also()
+                .addProp("currOwnership.role").asAutocompleter().also()
+                .addProp("currOwnership.bu").asAutocompleter().also()
+                .addProp("currOwnership.org").asAutocompleter().also()
+                .addProp("currOwnership.startDate").asDatePicker().also()
                 .addAction(MasterActions.REFRESH).shortDesc("Cancel").longDesc("Cancel action")
                 .addAction(MasterActions.SAVE)
                 .setActionBarLayoutFor(Device.DESKTOP, Optional.empty(), LayoutComposer.mkActionLayoutForMaster())
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
-                .withDimensions(mkDim(LayoutComposer.SIMPLE_ONE_COLUMN_MASTER_DIM_WIDTH, 480, Unit.PX))
+                .withDimensions(mkDim(LayoutComposer.SIMPLE_THREE_COLUMN_MASTER_DIM_WIDTH, 480, Unit.PX))
                 .done();
 
         return new EntityMaster<>(AssetType.class, AssetTypeProducer.class, masterConfig, injector);

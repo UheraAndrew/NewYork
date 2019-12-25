@@ -14,6 +14,6 @@ public interface IAssetOwnership extends IEntityDao<AssetOwnership> {
 
     static final IFetchProvider<AssetOwnership> FETCH_PROVIDER = EntityUtils.
             fetch(AssetOwnership.class).
-            with("asset", "role", "bu", "org", "startDate");
+            with("asset", "assetType", "role", "bu", "org", "startDate");
 
 }

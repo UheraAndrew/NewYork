@@ -112,7 +112,6 @@ public class AssetTypeOwnershipWebUiConfig {
         final IMaster<AssetTypeOwnership> masterConfig = new SimpleMasterBuilder<AssetTypeOwnership>().forEntity(AssetTypeOwnership.class)
                 .addProp("assetType").asAutocompleter().also()
                 .addProp("startDate").asDatePicker().also()
-                .addProp("endDate").asDatePicker().also()
                 .addProp("role").asAutocompleter().also()
                 .addProp("bu").asAutocompleter().also()
                 .addProp("org").asAutocompleter().also()

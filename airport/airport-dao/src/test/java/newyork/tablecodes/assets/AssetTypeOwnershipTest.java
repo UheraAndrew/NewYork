@@ -1,5 +1,6 @@
 package newyork.tablecodes.assets;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -18,6 +19,7 @@ import newyork.tablescodes.assets.IAssetTypeOwnership;
 import newyork.test_config.AbstractDaoTestCase;
 import newyork.test_config.UniversalConstantsForTesting;
 import ua.com.fielden.platform.dao.exceptions.EntityAlreadyExists;
+import ua.com.fielden.platform.utils.EntityUtils;
 import ua.com.fielden.platform.utils.IUniversalConstants;
 
 /**
@@ -30,11 +32,16 @@ import ua.com.fielden.platform.utils.IUniversalConstants;
 public class AssetTypeOwnershipTest extends AbstractDaoTestCase {
 
     @Test
-    public void ownership_with_either_role_or_bu_or_org_is_accepted() {
+    public void currOwnership_for_asset_type_finds_the_latest_ownership() {
         final AssetType at1 = co(AssetType.class).findByKeyAndFetch(IAssetTypeOwnership.FETCH_PROVIDER.<AssetType>fetchFor("assetType").fetchModel(), "AT1");
         final Role r1 = co(Role.class).findByKeyAndFetch(IAssetTypeOwnership.FETCH_PROVIDER.<Role>fetchFor("role").fetchModel(), "R1");
         final BusinessUnit bu1 = co(BusinessUnit.class).findByKeyAndFetch(IAssetTypeOwnership.FETCH_PROVIDER.<BusinessUnit>fetchFor("bu").fetchModel(), "BU1");
         final Organisation org1 = co(Organisation.class).findByKeyAndFetch(IAssetTypeOwnership.FETCH_PROVIDER.<Organisation>fetchFor("org").fetchModel(), "ORG1");
+        
+        final AssetTypeOwnership o0 = save(co(AssetTypeOwnership.class).new_()
+                .setAssetType(at1)
+                .setStartDate(date("2019-12-13 00:00:00"))
+                .setOrg(org1));
         
         final AssetTypeOwnership o1 = save(co(AssetTypeOwnership.class).new_()
                 .setAssetType(at1)
@@ -48,6 +55,33 @@ public class AssetTypeOwnershipTest extends AbstractDaoTestCase {
                 .setAssetType(at1)
                 .setStartDate(date("2019-12-19 00:00:00"))
                 .setOrg(org1));
+        
+        final AssetTypeOwnership o4 = save(co(AssetTypeOwnership.class).new_()
+                .setAssetType(at1)
+                .setStartDate(date("2020-01-03 00:00:00"))
+                .setBu(bu1));
+        
+        final UniversalConstantsForTesting constants = (UniversalConstantsForTesting) getInstance(IUniversalConstants.class);
+        constants.setNow(dateTime("2019-12-10 13:00:00"));
+        
+        final AssetType at1WithCurrOwnership1 = co(AssetType.class).findById(at1.getId(), EntityUtils.fetch(AssetType.class).with("currOwnership").fetchModel());
+        assertNull(at1WithCurrOwnership1.getCurrOwnership());
+        
+        constants.setNow(dateTime("2019-12-16 13:00:00"));
+        final AssetType at1WithCurrOwnership2 = co(AssetType.class).findById(at1.getId(), EntityUtils.fetch(AssetType.class).with("currOwnership").fetchModel());
+        assertEquals(o0, at1WithCurrOwnership2.getCurrOwnership());
+        
+        constants.setNow(dateTime("2019-12-17 13:00:00"));
+        final AssetType at1WithCurrOwnership3 = co(AssetType.class).findById(at1.getId(), EntityUtils.fetch(AssetType.class).with("currOwnership").fetchModel());
+        assertEquals(o1, at1WithCurrOwnership3.getCurrOwnership());
+        
+        constants.setNow(dateTime("2019-12-18 13:00:00"));
+        final AssetType at1WithCurrOwnership4 = co(AssetType.class).findById(at1.getId(), EntityUtils.fetch(AssetType.class).with("currOwnership").fetchModel());
+        assertEquals(o2, at1WithCurrOwnership4.getCurrOwnership());
+        
+        constants.setNow(dateTime("2020-02-18 13:00:00"));
+        final AssetType at1WithCurrOwnership5 = co(AssetType.class).findById(at1.getId(), EntityUtils.fetch(AssetType.class).with("currOwnership").fetchModel());
+        assertEquals(o4, at1WithCurrOwnership5.getCurrOwnership());
     
     }
     
@@ -181,7 +215,7 @@ public class AssetTypeOwnershipTest extends AbstractDaoTestCase {
     	// In this case the notion of now is overridden, which makes it possible to have an invariant system-time.
     	// However, the now value should be after AbstractDaoTestCase.prePopulateNow in order not to introduce any date-related conflicts.
     	final UniversalConstantsForTesting constants = (UniversalConstantsForTesting) getInstance(IUniversalConstants.class);
-    	constants.setNow(dateTime("2019-10-01 11:30:00"));
+    	constants.setNow(dateTime("2019-12-16 13:00:00"));
 
     	// If the use of saved data population script is indicated then there is no need to proceed with any further data population logic.
         if (useSavedDataPopulationScript()) {
