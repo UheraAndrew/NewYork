@@ -102,20 +102,27 @@ public class AssetWebUiConfig {
      * @return created entity master
      */
     private EntityMaster<Asset> createMaster(final Injector injector) {
-        final String layout = LayoutComposer.mkGridForMasterFitWidth(4, 1);
-
+        final String layout = LayoutComposer.mkVarGridForMasterFitWidth(1, 1, 2, 4, 4);
         final IMaster<Asset> masterConfig = new SimpleMasterBuilder<Asset>().forEntity(Asset.class)
                 .addProp("number").asSinglelineText().also()
-                .addProp("assetType").asAutocompleter().also()
                 .addProp("desc").asMultilineText().also()
+                .addProp("assetType").asAutocompleter().also()
                 .addProp("active").asCheckbox().also()
+                .addProp("assetType.currOwnership.role").asAutocompleter().also()
+                .addProp("assetType.currOwnership.bu").asAutocompleter().also()
+                .addProp("assetType.currOwnership.org").asAutocompleter().also()
+                .addProp("assetType.currOwnership.startDate").asDatePicker().also()
+                .addProp("currOwnership.role").asAutocompleter().also()
+                .addProp("currOwnership.bu").asAutocompleter().also()
+                .addProp("currOwnership.org").asAutocompleter().also()
+                .addProp("currOwnership.startDate").asDatePicker().also()
                 .addAction(MasterActions.REFRESH).shortDesc("Cancel").longDesc("Cancel action")
                 .addAction(MasterActions.SAVE)
                 .setActionBarLayoutFor(Device.DESKTOP, Optional.empty(), LayoutComposer.mkActionLayoutForMaster())
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
-                .withDimensions(mkDim(LayoutComposer.SIMPLE_ONE_COLUMN_MASTER_DIM_WIDTH, 480, Unit.PX))
+                .withDimensions(mkDim(LayoutComposer.SIMPLE_THREE_COLUMN_MASTER_DIM_WIDTH, 520, Unit.PX))
                 .done();
 
         return new EntityMaster<>(Asset.class, masterConfig, injector);
