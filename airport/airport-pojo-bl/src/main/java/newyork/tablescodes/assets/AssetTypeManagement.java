@@ -5,7 +5,6 @@ import java.util.Date;
 import newyork.organisational.BusinessUnit;
 import newyork.organisational.Organisation;
 import newyork.organisational.Role;
-import newyork.tablescodes.assets.definers.AssetOwnershipExclusivityDefiner;
 import newyork.tablescodes.assets.definers.AssetTypeManagementExclusivityDefiner;
 import newyork.tablescodes.validators.AssetTypeManagementEndTimeValiator;
 import ua.com.fielden.platform.entity.AbstractPersistentEntity;

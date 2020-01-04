@@ -113,7 +113,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
         final ServiceStatusWebUiConfig serviceStatusWebUiConfig = ServiceStatusWebUiConfig.register(injector(), builder); 
         final ConditionRatingWebUiConfig conditionRatingWebUiConfig = ConditionRatingWebUiConfig.register(injector(), builder);
         final AssetTypeOwnershipWebUiConfig assetTypeOwnershipWebUiConfig = AssetTypeOwnershipWebUiConfig.register(injector(), builder);
-        final AssetOwnershipWebUiConfig assetOwnershipWebUiConfig = AssetOwnershipWebUiConfig.register(injector(), builder);
+        
 
         final AssetTypeManagementWebUiConfig assetTypeManagementWebUiConfig = AssetTypeManagementWebUiConfig.register(injector(), builder);
         final AssetManagementWebUiConfig assetManagementWebUiConfig = AssetManagementWebUiConfig.register(injector(), builder);
@@ -124,6 +124,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
       // Asset
         final AssetWebUiConfig assetWebUiConfig = AssetWebUiConfig.register(injector(), builder);
         final AssetFinDetWebUiConfig assetFinDetWebUiConfig = AssetFinDetWebUiConfig.register(injector(), builder);
+        final AssetOwnershipWebUiConfig assetOwnershipWebUiConfig = AssetOwnershipWebUiConfig.register(injector(), builder);
         
         // Project related UI
         final ProjectWebUiConfig projectWebUiConfig = ProjectWebUiConfig.register(injector(), builder);
@@ -148,6 +149,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 captionBgColor("#42a5f5").menu()
                 .addMenuItem(Asset.ENTITY_TITLE).description(String.format("%s Centre", Asset.ENTITY_TITLE)).centre(assetWebUiConfig.centre).done()
                 .addMenuItem(AssetFinDet.ENTITY_TITLE).description(String.format("%s Centre", AssetFinDet.ENTITY_TITLE)).centre(assetFinDetWebUiConfig.centre).done()
+                .addMenuItem(AssetOwnership.ENTITY_TITLE).description(String.format("%s Centre", AssetOwnership.ENTITY_TITLE)).centre(assetOwnershipWebUiConfig.centre).done()
                 .addMenuItem(Project.ENTITY_TITLE).description(String.format("%s Centre", Project.ENTITY_TITLE)).centre(projectWebUiConfig.centre).done()
             .done().done().              
             addModule("Users / Personnel").
@@ -179,7 +181,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 .addMenuItem(ServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", ServiceStatus.ENTITY_TITLE)).centre(serviceStatusWebUiConfig.centre).done()
                 .addMenuItem(ConditionRating.ENTITY_TITLE).description(String.format("%s Centre", ConditionRating.ENTITY_TITLE)).centre(conditionRatingWebUiConfig.centre).done()
                 .addMenuItem(AssetTypeOwnership.ENTITY_TITLE).description(String.format("%s Centre", AssetTypeOwnership.ENTITY_TITLE)).centre(assetTypeOwnershipWebUiConfig.centre).done()
-                .addMenuItem(AssetOwnership.ENTITY_TITLE).description(String.format("%s Centre", AssetOwnership.ENTITY_TITLE)).centre(assetOwnershipWebUiConfig.centre).done()
+                
 
                 .addMenuItem(AssetTypeManagement.ENTITY_TITLE).description(String.format("%s Centre", AssetTypeManagement.ENTITY_TITLE)).centre(assetTypeManagementWebUiConfig.centre).done()
                 .addMenuItem(AssetManagement.ENTITY_TITLE).description(String.format("%s Centre", AssetManagement.ENTITY_TITLE)).centre(assetManagementWebUiConfig.centre).done()

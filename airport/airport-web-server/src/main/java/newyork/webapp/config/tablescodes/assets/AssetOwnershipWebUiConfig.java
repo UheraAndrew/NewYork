@@ -88,16 +88,9 @@ public class AssetOwnershipWebUiConfig {
                     .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", AssetOwnership.ENTITY_TITLE))
                     .withActionSupplier(builder.getOpenMasterAction(Asset.class)).also()
                 .addProp("startDate").order(2).desc().width(150).also()
-                .addProp("role").order(3).asc().minWidth(100)
-                    .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", Role.ENTITY_TITLE))
-                    .withActionSupplier(builder.getOpenMasterAction(Role.class)).also()
-                .addProp("bu").order(4).asc().minWidth(100)
-                    .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", BusinessUnit.ENTITY_TITLE))
-                    .withActionSupplier(builder.getOpenMasterAction(BusinessUnit.class)).also()
+                .addProp("role").order(3).asc().minWidth(100).also()
+                .addProp("bu").order(4).asc().minWidth(100).also()
                 .addProp("org").order(5).asc().minWidth(100)
-                    .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", Organisation.ENTITY_TITLE))
-                    .withActionSupplier(builder.getOpenMasterAction(Organisation.class))
-                //.addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
                 .addPrimaryAction(standardEditAction)
                 .build();
 
@@ -111,11 +104,11 @@ public class AssetOwnershipWebUiConfig {
      * @return created entity master
      */
     private EntityMaster<AssetOwnership> createMaster(final Injector injector) {
-        final String layout = LayoutComposer.mkGridForMasterFitWidth(6, 1);
+        final String layout = LayoutComposer.mkGridForMasterFitWidth(5, 1);
         final IMaster<AssetOwnership> masterConfig = new SimpleMasterBuilder<AssetOwnership>().forEntity(AssetOwnership.class)
                 .addProp("asset").asAutocompleter().also()
+                .addProp("assetType").asAutocompleter().also()
                 .addProp("startDate").asDatePicker().also()
-                .addProp("endDate").asDatePicker().also()
                 .addProp("role").asAutocompleter().also()
                 .addProp("bu").asAutocompleter().also()
                 .addProp("org").asAutocompleter().also()

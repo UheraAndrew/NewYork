@@ -4,9 +4,12 @@ import static ua.com.fielden.platform.utils.CollectionUtil.setOf;
 
 import java.util.Set;
 
+import newyork.tablescodes.assets.AssetOwnership;
 import newyork.tablescodes.assets.AssetTypeOwnership;
+import ua.com.fielden.platform.entity.AbstractEntity;
 import ua.com.fielden.platform.entity.meta.IAfterChangeEventHandler;
 import ua.com.fielden.platform.entity.meta.MetaProperty;
+import ua.com.fielden.platform.error.Result;
 
 public class AssetTypeOwnershipExclusivityDefiner implements IAfterChangeEventHandler<Object> {
 
@@ -14,9 +17,12 @@ public class AssetTypeOwnershipExclusivityDefiner implements IAfterChangeEventHa
     
     @Override
     public void handle(final MetaProperty<Object> prop, final Object value) {
+        if (!(prop.getEntity() instanceof AssetOwnership) && !(prop.getEntity() instanceof AssetTypeOwnership)) {
+            throw Result.failure("Stringly entitles of type AssetOwnership or AssetTypeOwnership are expected");
             
-        final AssetTypeOwnership ownership = prop.getEntity();
-        final boolean allEmpty = ownership.getRole() == null && ownership.getBu() == null && ownership.getOrg() == null;
+        }
+        final AbstractEntity<?> ownership = prop.getEntity();
+        final boolean allEmpty = ownership.get("role") == null && ownership.get("bu") == null && ownership.get("org") == null;
         
         ownershipPropNames.stream()
                 .map(name -> ownership.getProperty(name))

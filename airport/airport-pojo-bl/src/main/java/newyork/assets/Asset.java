@@ -3,10 +3,13 @@ package newyork.assets;
 import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.expr;
 import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.select;
 
+import newyork.tablescodes.assets.AssetClass;
+import newyork.tablescodes.assets.AssetOwnership;
 import newyork.tablescodes.assets.AssetType;
-
+import newyork.tablescodes.assets.AssetTypeOwnership;
 import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
+import ua.com.fielden.platform.entity.query.model.EntityResultQueryModel;
 import ua.com.fielden.platform.entity.query.model.ExpressionModel;
 
 import ua.com.fielden.platform.entity.annotation.CompanionObject;
@@ -24,7 +27,8 @@ import ua.com.fielden.platform.entity.annotation.Observable;
 import ua.com.fielden.platform.entity.annotation.Readonly;
 import ua.com.fielden.platform.entity.annotation.Required;
 import ua.com.fielden.platform.entity.annotation.Title;
-
+import ua.com.fielden.platform.entity.annotation.titles.PathTitle;
+import ua.com.fielden.platform.entity.annotation.titles.Subtitles;
 import ua.com.fielden.platform.reflection.TitlesDescsGetter;
 import ua.com.fielden.platform.utils.Pair;
 
@@ -59,11 +63,41 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     @Title(value = "Fin Det", desc = "Financial details for this asset")
     private AssetFinDet finDet;
 
+    @IsProperty
+    @Readonly
+    @Calculated
+    @Title(value = "Current Ownership", desc = "Desc")
+    @Subtitles({@PathTitle(path ="role", title="Ownership Role"),
+                @PathTitle(path ="bu", title="Ownership Business Unit"),
+                @PathTitle(path ="org", title="Ownership Organisation"),
+                @PathTitle(path ="startDate", title="Ownership Start Date")})
+    private AssetOwnership currOwnership;
+    private static final EntityResultQueryModel<AssetOwnership> subQuery = select(AssetOwnership.class).where()
+            .prop("asset").eq().extProp("asset").and()
+            .prop("startDate").le().now().and()
+            .prop("startDate").gt().extProp("startDate").model();
 
+
+    protected static final ExpressionModel currOwnership_ = expr().model(select(AssetOwnership.class).where().prop("asset").eq().extProp("id").and().prop("startDate").le().now().and().notExists(subQuery).model()).model();
+
+    @Observable
+    protected Asset setCurrOwnership(final AssetOwnership name) {
+        this.currOwnership = name;
+        return this;
+    }
+
+    public AssetOwnership getCurrOwnership() {
+        return currOwnership;
+    }
+    
     @IsProperty
     @MapTo
-    @Title(value = "Asset Type", desc = "A type of asset")
+    @Title(value = "Type", desc = "A type of asset")
     @Required
+    @Subtitles({@PathTitle(path ="currOwnership.role", title="Type Ownership Role"),
+                @PathTitle(path ="currOwnership.bu", title="Type Ownership Business Unit"),
+                @PathTitle(path ="currOwnership.org", title="Type Ownership Organisation"),
+                @PathTitle(path ="currOwnership.startDate", title="Type Ownership Start Date")})
     private AssetType assetType;
     
     @Observable
@@ -102,11 +136,13 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     public AssetType getAssetType() {
         return assetType;
     }
-
-
-
     
-
+    @Override
+    @Observable
+    public Asset setActive(boolean active) {
+        super.setActive(active);
+        return this;
+    }
     
 
 
