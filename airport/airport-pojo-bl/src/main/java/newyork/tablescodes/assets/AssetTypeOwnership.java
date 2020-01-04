@@ -6,7 +6,6 @@ import newyork.organisational.BusinessUnit;
 import newyork.organisational.Organisation;
 import newyork.organisational.Role;
 import newyork.tablescodes.assets.definers.AssetTypeOwnershipExclusivityDefiner;
-import newyork.tablescodes.validators.AssetTypeOwnershipEndTimeValiator;
 import ua.com.fielden.platform.entity.AbstractPersistentEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.CompanionObject;
